@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+from PIL import Image
+import os
+import re
+import subprocess
+
+folder = 'supplier-data/images'
+files = os.listdir(folder)
+extension = '.tiff'
+for file in files:
+        if re.search(extension, file) != None:
+                filepath = 'supplier-data/images/' + file
+                im = Image.open(filepath)
+                im = im.convert('RGB')
+                im.resize((600, 400)).save(filepath[:-5] + '.jpeg')
+                subprocess.run(['rm', filepath])

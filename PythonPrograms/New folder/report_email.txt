@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+
+import os
+import reports
+import datetime
+
+folder = 'supplier-data/descriptions'
+files = os.listdir(folder)
+for file in folder:
+        filename = folder + '/' + file
+        with open(filename, 'r') as f:
+                content = f.readlines()
+        name = content[0].rstrip("\n")
+        weight = content[1].rstrip("\n")
+        item = """
+Name : """ + name + """
+Weight: """ + weight +"""
+
+"""
+        print(item)
