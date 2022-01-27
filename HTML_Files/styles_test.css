@@ -1,3 +1,7 @@
 h1{
     color: maroon
 }
+.next {
+    text-align: right;
+    vertical-align: top;
+}
