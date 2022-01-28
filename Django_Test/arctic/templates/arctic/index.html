@@ -1,0 +1,15 @@
+{% extends 'arctic/layout.html' %}
+{% block body %}
+        <h1> Main Page </h1>
+        <h2>Tasks:</h2>
+    {% if tb %}
+        <ul>
+            {% for task in tasks %}
+                <li>{{ task }}</li>
+            {% endfor  %}
+        </ul>
+    {% else %}
+        <h4>No Tasks.</h4>
+    {% endif %}
+        <a href="{% url 'arctic:add' %}">Add Tasks</a>
+{% endblock %}

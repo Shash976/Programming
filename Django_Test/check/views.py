@@ -1,4 +1,3 @@
-from tkinter.messagebox import YES
 from django.shortcuts import render
 from django.http import HttpResponse
 import datetime

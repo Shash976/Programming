@@ -1,0 +1,10 @@
+{% extends "arctic/layout.html" %}
+{% block body %}
+    <h1>Add Task</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+    <a href="{% url 'arctic:index' %}">Index Page</a>
+{% endblock %}
