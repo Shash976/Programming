@@ -9,9 +9,6 @@ class NewTaskForm(forms.Form):
 
 tasks = []
 def index(request):
-    if "tasks" not in request.session:
-        request.session["tasks"] = []
-
     return render(request, "arctic/index.html", {"tasks": request.session["tasks"], "tb": len(tasks)!=0})
 
 def add(request):
@@ -19,7 +16,7 @@ def add(request):
         form = NewTaskForm(request.POST)
         if form.is_valid():
             task = form.cleaned_data["task"]
-            request.session["tasks"] += [task]
+            tasks.append(task)
             return HttpResponseRedirect(reverse("arctic:index"))
         else:
             return render(request, "arctic/add.html", {"form": form})
