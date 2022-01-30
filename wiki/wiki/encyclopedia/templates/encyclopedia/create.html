@@ -3,9 +3,16 @@
     Create Page
 {% endblock %}
 {% block body %}
+{% if red != True %}
     <h1>Create a New Page</h1>
-    <form>
-        <textarea name="create" rows="4" cols="50"></textarea>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ title }}
+        {{ textarea }}
         <input type="submit" value="submit">
     </form>
+{% else %}
+    <h1> Error </h1>
+    <h3>This page already exists.</h3>
+{% endif %}
 {% endblock %}

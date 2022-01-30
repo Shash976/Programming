@@ -1,8 +1,18 @@
 from django.shortcuts import render
 from . import util
 import re
+import random
+from django import forms
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # Create your views here.
+class NewPageForm(forms.Form):
+    page_entry=forms.CharField(widget=forms.Textarea, label="Create New Page")
+
+class NewTitleForm(forms.Form):
+    page_title = forms.CharField(label="Enter Title")
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -55,3 +65,10 @@ def edit_page(request, title):
         util.save_entry(title, new_content)
         return HttpResponseRedirect(reverse("encyclopedia:entry", kwargs={'title': title}))
     return render(request, "encyclopedia/edit.html", {"title":title, "content":content})
+
+def random_page(request):
+    total_entries=util.list_entries()
+    total=len(total_entries)
+    lucky_num = random.randrange(total)
+    title = total_entries[lucky_num]
+    return HttpResponseRedirect(reverse("encyclopedia:entry", kwargs={'title': title}))

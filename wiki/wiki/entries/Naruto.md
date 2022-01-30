@@ -1,0 +1,1 @@
+Naruto is a shinobi from Konohagakure.

@@ -9,7 +9,7 @@ class NewTaskForm(forms.Form):
 
 tasks = []
 def index(request):
-    return render(request, "arctic/index.html", {"tasks": request.session["tasks"], "tb": len(tasks)!=0})
+    return render(request, "arctic/index.html", {"tasks": tasks, "tb": len(tasks)!=0})
 
 def add(request):
     if request.method == "POST":
