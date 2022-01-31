@@ -1,1 +1,0 @@
-Itachi Uchiha is a shinobi from Konohagakure (Hidden Leaf VIllage). He is the brother of Sasuke Uchiha

@@ -1,1 +1,0 @@
-Sasuke is a shinobi from Konohagakure village
