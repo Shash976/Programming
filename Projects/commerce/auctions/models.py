@@ -22,3 +22,11 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.category}"
+
+class Bid(models.Model):
+    user = models.CharField(max_length=50)
+    bid = models.IntegerField()
+    listing_title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Bid of {self.listing_title} of {self.bid} by {self.user}"
