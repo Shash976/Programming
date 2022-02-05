@@ -83,7 +83,12 @@ def create_listing(request):
 
 def listing(request, listing_id):
     item_details = Listing.objects.get(pk=listing_id)
-    return render(request, "auctions/listing.html", {"listing":item_details})
+    if request.method == "POST":
+        bid = request.POST.get("bid")
+        if request.user.is_authenticated:
+            item = Listing.objects.get(pk=listing_id)
+            if int(bid) <= item.bid:
+                return render(request, "auctions/listing.html", {"listing":item_details})
 
 @login_required(login_url='login')
 def bids(bid, listing_id):
