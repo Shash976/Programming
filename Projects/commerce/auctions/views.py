@@ -89,8 +89,7 @@ def listing(request, listing_id):
             item = Listing.objects.get(pk=listing_id)
             if int(bid) <= item.bid:
                 return render(request, "auctions/listing.html", {"listing":item_details})
-
-@login_required(login_url='login')
-def bids(bid, listing_id):
-    item = Listing.objects.get(pk=listing_id)
-    return item.bid == int(bid)
+            item.bid = int(bid)
+            item.save()
+            return HttpResponseRedirect(reverse('listing', args=(item.id,)))
+    return render(request, "auctions/listing.html", {"listing":item_details})
