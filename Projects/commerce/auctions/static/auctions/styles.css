@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+  }
+
 body {
     padding: 10px;
 }
@@ -8,7 +12,7 @@ ul {
 }
 .listing_image{
     max-width:100%;
-    height:100%;
+    height:auto;
 }
 #listing{
     border: 3px solid rgb(167, 167, 167);

@@ -3,7 +3,15 @@
     <h2 id="title">{{listing.title}}</h2>
     <div id="content">
         <div id="base_details_sec">
+            {% if user.is_authenticated %}
+            <form action="" method="post">
+                {% csrf_token %}
+                Current Price - $<input type="number" name="bid" value="{{listing.bid}}">
+                <input type="submit" name="Bid" value="Bid">
+            </form>
+            {% else %}
             Current Price - ${{listing.bid}}
+            {% endif %}
             <br>
             [Listed by: {{listing.user}}] 
             <br>
@@ -15,4 +23,5 @@
         </div>    
         {% endif %} 
     </div>
+
 {% endblock %}
