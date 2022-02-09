@@ -20,6 +20,48 @@ function compose_email() {
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
+
+  const submit = document.querySelector('#submit');
+  const newEmail = document.querySelector('#compose-subject');
+/*
+  // Disable submit button by default:
+  submit.disabled = true;
+
+  // Listen for input to be typed into the input field
+  newEmail.onkeyup = () => {
+      if (newEmail.value.length > 0) {
+          submit.disabled = false;
+      }
+      else {
+          submit.disabled = true;
+      }
+  }
+*/
+  // Listen for submission of form
+  document.querySelector('form').onsubmit = () => {
+    // Find the task the user just submitted
+    let body = document.querySelector('#compose-body').value;
+    let subject = document.querySelector('#compose-subject').value;
+    let recipients = document.querySelector('#compose-recipients').value;
+    console.log(`To: ${recipients}, ${subject} - ${body}`);
+    fetch('/emails', {
+      method: 'POST',
+      body: JSON.stringify({
+          recipients: recipients,
+          subject: subject,
+          body: body
+      })
+    })
+    .then(response => response.json())
+    .then(result => {
+        // Print result
+        console.log(result);
+        if (result.message == 'Email sent successfully.'){
+          load_mailbox('inbox')
+        }
+    })
+    return false;
+  }
 }
 
 function load_mailbox(mailbox) {
