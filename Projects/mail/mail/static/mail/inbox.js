@@ -15,6 +15,7 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#email-view').style.display = 'none';
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -56,10 +57,8 @@ function compose_email() {
     .then(result => {
         // Print result
         console.log(result);
-        if (result.message == 'Email sent successfully.'){
-          load_mailbox('inbox')
-        }
     })
+    load_mailbox('sent')
     return false;
   }
 }
@@ -69,6 +68,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3><br/><ul id="emails"></ul>`;
@@ -76,13 +76,22 @@ function load_mailbox(mailbox) {
   .then(response => response.json())
   .then(emails => { 
       // Print emails
-      console.log(emails),
       emails.forEach(email=> {
-        console.log(email)
-        const newLI = document.createElement('li')
-        newLI.innerHTML = `${email.subject} - ${email.sender}  ${email.body}`
-        document.querySelector('#emails').append(newLI)
-      // ... do something else with emails ..
+        console.log(email);
+        const newM = document.createElement('li');
+        newM.innerHTML = `<div class="email">${email.subject} - ${email.sender}  ${email.body}</div>`;
+        document.querySelector('#emails').append(newM);
+        newM.onclick  = () => {
+          load_email(email.id)
+        }
       });
     });
+}
+
+function load_email(email_id) {
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'block';
+
+
 }
