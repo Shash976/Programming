@@ -87,9 +87,8 @@ function load_mailbox(mailbox) {
           newM.style.border = '1px solid black'
           newM.style.background = 'white';
         }
-        newM.onclick  = () => {
-          load_email(email.id)
-        }
+        newM.addEventListener('click', () => load_email(email.id));
+        document.querySelector('#emails').append(newM);
       });
     });
 }
@@ -111,6 +110,5 @@ function load_email(email_id) {
     body: JSON.stringify({
         read: true
     })
-  })
-
+  }) 
 }
