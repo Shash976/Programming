@@ -78,9 +78,15 @@ function load_mailbox(mailbox) {
       // Print emails
       emails.forEach(email=> {
         console.log(email);
-        const newM = document.createElement('li');
-        newM.innerHTML = `<div class="email">${email.subject} - ${email.sender}  ${email.body}</div>`;
-        document.querySelector('#emails').append(newM);
+        const newM = document.createElement('div');
+        newM.className = 'email'
+        newM.innerHTML = `<li>${email.sender}:  ${email.subject}  (${email.timestamp})</li>`;
+        if (email.read==true) {
+          newM.style.background = 'gray';
+        } else {
+          newM.style.border = '1px solid black'
+          newM.style.background = 'white';
+        }
         newM.onclick  = () => {
           load_email(email.id)
         }
@@ -93,5 +99,18 @@ function load_email(email_id) {
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email-view').style.display = 'block';
 
+  fetch(`/emails/${email_id}`)
+  .then(response => response.json())
+  .then(email => {
+    document.querySelector('#email-view').innerHTML = `<h3>${email.subject}</h3><br/><div id="email"></div>`;
+    console.log(email)
+    document.querySelector('#email').innerHTML = `<h5>From: ${email.sender} <br/> To: ${email.recipients} <br/></h5><p>${email.body}</p>`
+  })
+  fetch(`/emails/${email_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: true
+    })
+  })
 
 }
