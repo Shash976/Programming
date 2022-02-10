@@ -80,18 +80,63 @@ function load_mailbox(mailbox) {
         console.log(email);
         const newM = document.createElement('div');
         newM.className = 'email'
-        newM.innerHTML = `<li>${email.sender}:  ${email.subject}  (${email.timestamp})</li>`;
+        newM.innerHTML = `<li><p class="details">${email.sender}:  ${email.subject}  (${email.timestamp})</p><button class="archive">Archive</button></li>`;
+        archive = newM.querySelector('.archive');
+        archive.style.display = 'none';
+        newM.querySelector('.details').style.float = 'none';
+        // Check for read email
         if (email.read==true) {
           newM.style.background = 'gray';
         } else {
           newM.style.border = '1px solid black'
           newM.style.background = 'white';
-        }
-        newM.addEventListener('click', () => load_email(email.id));
+        };
+        // Check Mailbox
+        // Archiving Emails
+        archive_email(newM, email.id, mailbox)
+        newM.querySelector('.details').addEventListener('click', () => load_email(email.id));
         document.querySelector('#emails').append(newM);
       });
     });
+};
+
+function archive_email(element, email_id, mailbox){
+  element.addEventListener('mouseover', () => {
+    element.querySelector('.archive').style.display = 'block';
+    element.querySelector('.details').style.float = 'left';
+    element.style.background = '#bdbbbb';
+    if (mailbox == 'archive') {
+      element.querySelector('.archive').innerHTML = 'Unarchive';
+    }
+    element.querySelector('.archive').addEventListener('click', () => {
+      if (mailbox == 'archive') {
+        fetch(`/emails/${email_id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            archived: false
+          })
+        })
+      } else {
+        fetch(`/emails/${email_id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            archived: true
+          })
+        })
+      }
+      element.style.animationPlayState = 'running';
+      element.addEventListener('animationend', () => {
+        element.remove()
+      })
+    });
+  });
+  element.addEventListener('mouseout', () => {
+    element.querySelector('.archive').style.display = 'none';
+    element.querySelector('.details').style.float = 'none';
+    element.style.background = 'gray';
+  });
 }
+
 
 function load_email(email_id) {
   document.querySelector('#emails-view').style.display = 'none';
