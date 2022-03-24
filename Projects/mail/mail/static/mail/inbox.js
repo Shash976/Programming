@@ -39,6 +39,7 @@ function compose_email() {
   }
 */
   // Listen for submission of form
+  //
   document.querySelector('form').onsubmit = () => {
     // Find the task the user just submitted
     let body = document.querySelector('#compose-body').value;
@@ -77,10 +78,9 @@ function load_mailbox(mailbox) {
   .then(emails => { 
       // Print emails
       emails.forEach(email=> {
-        console.log(email);
         const newM = document.createElement('div');
         newM.className = 'email'
-        newM.innerHTML = `<li><p class="details">${email.sender}:  ${email.subject}  (${email.timestamp})</p><button class="archive">Archive</button></li>`;
+        newM.innerHTML = `<li><div class='mail'><p class="details">${email.sender}:  ${email.subject}  (${email.timestamp})</p></div><button class="archive">Archive</button></li>`;
         archive = newM.querySelector('.archive');
         archive.style.display = 'none';
         newM.querySelector('.details').style.float = 'none';
@@ -94,7 +94,7 @@ function load_mailbox(mailbox) {
         // Check Mailbox
         // Archiving Emails
         archive_email(newM, email.id, mailbox)
-        newM.querySelector('.details').addEventListener('click', () => load_email(email.id));
+        newM.querySelector('.mail').addEventListener('click', () => load_email(email.id));
         document.querySelector('#emails').append(newM);
       });
     });
@@ -147,7 +147,6 @@ function load_email(email_id) {
   .then(response => response.json())
   .then(email => {
     document.querySelector('#email-view').innerHTML = `<h3>${email.subject}</h3><br/><div id="email"></div>`;
-    console.log(email)
     document.querySelector('#email').innerHTML = `<h5>From: ${email.sender} <br/> To: ${email.recipients} <br/></h5><p>${email.body}</p>`
   })
   fetch(`/emails/${email_id}`, {

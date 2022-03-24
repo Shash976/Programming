@@ -70,11 +70,11 @@ def create_listing(request):
             description = form.cleaned_data["description"]
             title = form.cleaned_data["listing_title"]
             starting_bid = form.cleaned_data["bid"]
-            username = request.user()
+            username = request.user
             image = form.cleaned_data["image"]
             category = Category.objects.get(id=int(request.POST["category"]))
         listing=Listing.objects.create(title=title, description=description, bid=starting_bid, user=username, image=image)
-        listing.save()
+        listing.save
         category.listings.add(listing)
         return HttpResponseRedirect(reverse("index"))
     return render(request, "auctions/create.html", {

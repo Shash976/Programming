@@ -1,0 +1,35 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<ul id="all_posts">
+    {% for post in posts %}
+            <div id="post">
+                <li>
+                    <div id="content">
+                        <h2><a href="{{post.user}}">{{post.user.first_name}} {{post.user.last_name}}</a></h2><small>{{post.time}}</small>
+                        <br>
+                        <p>{{post.content}}</p>
+                    </div>
+                    {% if post.image %}
+                    <div id="image">
+                        <img src={{post.image}} class="post_image">           
+                    </div>    
+                    {% endif %}
+                    <small>❣️{{post.likes}}</small>
+                </li>
+            </div>
+    {% endfor %}
+</ul>
+
+
+    {%if posts.has_previous %} {# whether the previous page exists #}
+        <a href="?page={{posts.previous_page_number}}"> << </a> {# link to the prev page #}
+    {% endif %}
+    <span>{{posts.number}}</span> {# the current page number #}
+    
+    {%if posts.has_next %} {# whether the next page exists #}
+        <a href="?page={{posts.next_page_number}}">>></a> {# link to the next page #}
+    {% endif %}
+
+
+{% endblock %}

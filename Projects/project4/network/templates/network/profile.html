@@ -1,0 +1,45 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+    <div><h1>{{profile.username}}</h1><h3>Following - {{profile.follows.all|length}} | Followers - {{profile.followed_by.all|length}} </h3></div>
+    <p>{{profile.description}}</p>
+    <hr>
+    {% if profile != user and user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {% if profile not in user.follows.all %}
+            <input type="submit" name="follow" value="Follow">
+            {% else %}
+            <input type="submit" name="follow" value="Unfollow">
+            {% endif %}
+        </form>
+    {% endif %}
+    <br>
+
+    {% if posts %}
+    <ul id="all_posts">
+        {% for post in posts %}
+            <div id="post">
+                <li>
+                    <div id="content">
+                        <h2>{{post.user.first_name}} {{post.user.last_name}}</h2><small>{{post.time}}</small>
+                        <br>
+                        <p>{{post.content}}</p>
+                    </div>
+                    {% if post.image %}
+                    <div id="image">
+                        <img src={{post.image}} class="post_image">           
+                    </div>    
+                    {% endif %}
+                    <small>❣️{{post.likes}}</small>
+                </li>
+            </div>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <h1>No Posts.</h1>
+    {% endif %}
+
+
+{% endblock %}
