@@ -30,6 +30,6 @@ class Post(models.Model):
                 "Name": self.user.first_name
                 },
             "content": self.content,
-            "like": self.likes,
+            "likes": self.likes,
             "time": self.time.strftime("%b %d %Y, %I:%M %p"),
         }

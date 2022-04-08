@@ -1,15 +1,19 @@
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import NewPostForm
 from .models import User, Post
 import datetime
 from operator import attrgetter
+import json
+
 
 
 def index(request):
@@ -71,6 +75,7 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+@login_required
 def new_post(request):
     if request.method == "POST":
         form = NewPostForm(request.POST, request.FILES)
@@ -107,6 +112,7 @@ def profile(request, username):
     else:
         return HttpResponse('User Does not Exist')
 
+@login_required
 def following(request):
     user = request.user
     accounts = user.follows.all()
@@ -118,3 +124,22 @@ def following(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {"posts":page_obj})
+
+@csrf_exempt
+@login_required
+def likes(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Email not found."}, status=404)
+
+    # Return email contents
+    if request.method == "GET":
+        return JsonResponse(post.serialize())
+    
+    elif request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("likes") != post.likes:
+            post.likes = data.get("likes")
+        post.save()
+        return HttpResponse(status=204)

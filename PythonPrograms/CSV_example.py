@@ -21,6 +21,7 @@ def process_data(employee_list):
         for department_name in set(department_list):
                 department_data[department_name] = department_list.count(department_name)
         return department_data
+        
 dictionary = process_data(employee_list)
 
 

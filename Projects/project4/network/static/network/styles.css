@@ -15,7 +15,7 @@ body {
     max-width:100%;
     height:auto;
 }
-#post{
+.post{
     border: 3px solid rgb(167, 167, 167);
     border-radius: 8px;
     padding: 20px;

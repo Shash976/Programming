@@ -3,10 +3,11 @@
 {% block body %}
 <ul id="all_posts">
     {% for post in posts %}
-            <div id="post">
+            <div class="post">
                 <li>
+                    <p id="post_id" hidden>{{post.id}}</p>
+                    <h2><a href="{{post.user}}">{{post.user.first_name}} {{post.user.last_name}}</a></h2><small>{{post.time}}</small>
                     <div id="content">
-                        <h2><a href="{{post.user}}">{{post.user.first_name}} {{post.user.last_name}}</a></h2><small>{{post.time}}</small>
                         <br>
                         <p>{{post.content}}</p>
                     </div>
@@ -15,7 +16,7 @@
                         <img src={{post.image}} class="post_image">           
                     </div>    
                     {% endif %}
-                    <small>❣️{{post.likes}}</small>
+                    <p>❣️<small id="likes">{{post.likes}}</small>                <span><button id="unlike">👎🏻</button></span></p>
                 </li>
             </div>
     {% endfor %}
@@ -31,5 +32,5 @@
         <a href="?page={{posts.next_page_number}}">>></a> {# link to the next page #}
     {% endif %}
 
-
+<h6 id="test"></h6>
 {% endblock %}
