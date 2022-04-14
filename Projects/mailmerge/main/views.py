@@ -1,16 +1,17 @@
-from operator import concat
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from .forms import NewEmailForm, NewRecipientForm
 from .models import Recipient
+from .convert import csv_to_json, excel_to_json
 
 import re
 import smtplib
+import json
 
 # Create your views here.
-
+'''
 def create_recipient(request):
     if request.method == "POST":
         form = NewRecipientForm(request.POST)
@@ -25,6 +26,8 @@ def create_recipient(request):
     return render(request, "main/index.html", {
         "form": NewRecipientForm(),
         })
+'''
+
 
 def index(request):
     if request.method == "POST":
@@ -38,8 +41,8 @@ def index(request):
         "form": NewEmailForm(),
         })
 
-def process_email(content, subject, to):
-    
+
+def process_email(content, subject, to):    
     server_ssl = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server_ssl.connect("smtp.gmail.com",465)
     server_ssl.ehlo()
@@ -68,3 +71,15 @@ def process_email(content, subject, to):
         rc.update(dict)
         server_ssl.sendmail("itshashgoel@gmail.com", recipient, content)
     server_ssl.quit()
+
+def recipients(filepath):
+    if re.search(r'.xslx$', filepath):
+        json_file = excel_to_json(filepath)
+    elif re.search(r'.csv$', filepath):
+        json_file = csv_to_json(filepath)
+    elif re.search(r'.json$', filepath):
+        json_file = filepath
+
+    with open(json_file) as file:
+        data = json.load(file)
+
