@@ -4,9 +4,7 @@
 
 using namespace std;
 string name;
-int x;
-int y;
-int z;
+int x, y, z;
 
 int main()
 {
