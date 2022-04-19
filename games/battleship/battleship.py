@@ -16,8 +16,7 @@ def create_player(player):
 
     player_data[player] = {"map":player_map, "turns":0, "hits":0}
 
-
-def game(attacker, defender):
+def play_battleship(attacker, defender):
     hits = player_data[attacker]["hits"]
     turns = player_data[attacker]["turns"]
     map = player_data[defender]["map"]
@@ -34,18 +33,22 @@ def game(attacker, defender):
         player_data[attacker]["turns"] = turns
     print(f'{attacker} took {turns} turns to beat the game')
 
-for player in players:
-    create_player(player)
-game(players[0], players[1])
-game(players[1], players[0])
-turns = {}
-print(player_data)
-for player in players:
-    turns.update({player:player_data[player]["turns"]})
-print(player_data)
-print(turns)
-max_chances = max(turns[players[0]], turns[players[1]])
-least_chances = min(turns[players[0]], turns[players[1]])
-winner = list(turns.keys())[list(turns.values()).index(least_chances)]
-print(f"{winner} won the game!!! By {max_chances-least_chances} chances!")
+def main():
+    for player in players:
+        create_player(player)
+    play_battleship(players[0], players[1])
+    play_battleship(players[1], players[0])
+    turns = {}
+    print(player_data)
+    for player in players:
+        turns.update({player:player_data[player]["turns"]})
+    print(player_data)
+    print(turns)
+    max_chances = max(turns[players[0]], turns[players[1]])
+    least_chances = min(turns[players[0]], turns[players[1]])
+    winner = list(turns.keys())[list(turns.values()).index(least_chances)]
+    print(f"{winner} won the game!!! By {max_chances-least_chances} chances!")
 sleep(5)
+
+if __name__ == '__main__':
+    main()
