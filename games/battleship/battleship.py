@@ -48,8 +48,6 @@ def main():
     turns = {}
     for player in players:
         turns.update({player:player_data[player]["turns"]})
-    print(player_data)
-    print(turns)
     max_chances = max(turns[players[0]], turns[players[1]])
     least_chances = min(turns[players[0]], turns[players[1]])
     winner = list(turns.keys())[list(turns.values()).index(least_chances)]

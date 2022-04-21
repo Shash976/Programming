@@ -8,6 +8,13 @@ class Player:
       self.hits = hits
       self.__class__.players.append(self)
 
+    def get_player_by_turns(self, turns):
+        players = self.__class__.players
+        for player in players:
+            if player.turns == turns:
+                p = player
+        return p
+
 def create_map(player):
     player.map = [[],[],[],[]] #Map
     print(f"Make Map {player.name}")
@@ -21,11 +28,11 @@ def play_battleship(attacker, defender):
     attacker.hits = 0
     attacker.turns = 0
     while attacker.hits < 4:
-        row = int(input(f"Choose Co-ordinates {attacker.name}\nRow (between 1 and 4): "))
-        column = int(input("Column (between 1 & 4): "))
-        if defender.map[row-1][column-1] == 1:
+        row = int(input(f"Choose Co-ordinates {attacker.name}\nRow (between 1 and 4): "))-1
+        column = int(input("Column (between 1 & 4): "))-1
+        if defender.map[row][column] == 1:
             attacker.hits += 1
-            defender.map[row-1][column-1] = 0
+            defender.map[row][column] = 0
             print(f'HIT! You have hit {attacker.hits} ships\nRemaining {4-attacker.hits} ships')
         else:
             print('Miss')
@@ -33,19 +40,16 @@ def play_battleship(attacker, defender):
     print(f'{attacker.name} took {attacker.turns} turns to destroy {defender.name}\'s fleet!!')
 
 def main():
-    players = Player.players
     for id in range(2):
         player = Player(name=input(f"Player {id+1}: "), id=id, map = '', turns=0, hits=0) #Create Player
         create_map(player)
-    print(players)
+    players = Player.players
     play_battleship(players[0], players[1])
     play_battleship(players[1], players[0])
-    turns = {}
-    for player in players:
-        turns.update({player:player.turns})
-    max_turns = max(players[0].turns, players[1].turns)
-    min_turns = min(players[0].turns, players[1].turns)
-    print(f"Min Turns: {min_turns}")
+    max_chances = max(players[0].turns, players[1].turns)
+    least_chances = min(players[0].turns, players[1].turns)
+    winner = players[0].get_player_by_turns(least_chances)
+    print(f"{winner.name} won the game!!! By {max_chances-least_chances} chances!")
 
 if __name__ == "__main__":
     main()
