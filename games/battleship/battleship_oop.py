@@ -1,10 +1,13 @@
 class Player:
+    players = []
     def __init__(self, name, map, id, turns, hits):
       self.id = id
       self.name = name
       self.map = map
       self.turns  = turns 
       self.hits = hits
+      self.__class__.players.append(self)
+
 def create_map(player):
     player.map = [[],[],[],[]] #Map
     print(f"Make Map {player.name}")
@@ -30,16 +33,11 @@ def play_battleship(attacker, defender):
     print(f'{attacker.name} took {attacker.turns} turns to destroy {defender.name}\'s fleet!!')
 
 def main():
-    players = []
+    players = Player.players
     for id in range(2):
-        player = Player
-        player.id = id
-        player.name = input(f"Player {id+1}: ")
+        player = Player(name=input(f"Player {id+1}: "), id=id, map = '', turns=0, hits=0) #Create Player
         create_map(player)
-        players.append(player)
-        print(f"Player {player.id+1}: {player.name}")
-    print(players[0].name, players[1].name)
-    '''
+    print(players)
     play_battleship(players[0], players[1])
     play_battleship(players[1], players[0])
     turns = {}
@@ -48,6 +46,6 @@ def main():
     max_turns = max(players[0].turns, players[1].turns)
     min_turns = min(players[0].turns, players[1].turns)
     print(f"Min Turns: {min_turns}")
-    '''
+
 if __name__ == "__main__":
     main()
