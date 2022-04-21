@@ -5,14 +5,21 @@ player2 = input("Player 2: ")
 players = [player1, player2]
 player_data = {}
 
-def create_player(player):
-    player_map = [[],[],[],[]]
+def check_map(map): #check map
+    n = []
+    for i in range(len(map)):
+        s = sum(map[i])
+        n.append(s)
+    return sum(n)
+
+def create_map(player):
+    player_map = [[],[],[],[]] #Map
     print(f"Make Map {player}")
-    for n in range(len(player_map)):
-        raw_string = input(f"Row {n+1}: ")
-        player_map[n] = raw_string.split(' ')
-        for x in range(len(player_map[n])):
-            player_map[n][x] = int(player_map[n][x])
+    for row in range(len(player_map)):
+        raw_string = input(f"Row {row+1}: ") #Row Input
+        player_map[row] = raw_string.split(' ') #Split Input to List
+        for column in range(len(player_map[row])):
+            player_map[row][column] = int(player_map[row][column]) # Convert string list to integer list
 
     player_data[player] = {"map":player_map, "turns":0, "hits":0}
 
@@ -21,11 +28,11 @@ def play_battleship(attacker, defender):
     turns = player_data[attacker]["turns"]
     map = player_data[defender]["map"]
     while hits < 4:
-        row = int(input(f"Choose Co-ordinates {attacker}\nRow (between 0 and 3): "))
-        column = int(input("Column (between 0 & 3): "))
-        if map[row][column] == 1:
+        row = int(input(f"Choose Co-ordinates {attacker}\nRow (between 1 and 4): "))
+        column = int(input("Column (between 1 & 4): "))
+        if map[row-1][column-1] == 1:
             hits += 1
-            map[row][column] = 0
+            map[row-1][column-1] = 0
             print(f'HIT! You have hit {hits} ships\nRemaining {4-hits} ships')
         else:
             print('Miss')
@@ -35,11 +42,10 @@ def play_battleship(attacker, defender):
 
 def main():
     for player in players:
-        create_player(player)
+        create_map(player)
     play_battleship(players[0], players[1])
     play_battleship(players[1], players[0])
     turns = {}
-    print(player_data)
     for player in players:
         turns.update({player:player_data[player]["turns"]})
     print(player_data)
