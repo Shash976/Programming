@@ -1,11 +1,10 @@
 class Player:
     def __init__(self, name, map, id, turns, hits):
-        id = self.id
-        name = self.name
-        map = self.map
-        turns = self.turns
-        hits = self.hits
-
+      self.id = id
+      self.name = name
+      self.map = map
+      self.turns  = turns 
+      self.hits = hits
 def create_map(player):
     player.map = [[],[],[],[]] #Map
     print(f"Make Map {player.name}")
@@ -40,9 +39,10 @@ def main():
         players.append(player)
         print(f"Player {player.id+1}: {player.name}")
     print(players[0].name, players[1].name)
+    '''
     play_battleship(players[0], players[1])
     play_battleship(players[1], players[0])
-    ''' turns = {}
+    turns = {}
     for player in players:
         turns.update({player:player.turns})
     max_turns = max(players[0].turns, players[1].turns)
