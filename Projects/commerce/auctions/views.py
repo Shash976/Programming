@@ -87,7 +87,7 @@ def listing(request, listing_id):
         bid = request.POST.get("bid")
         if request.user.is_authenticated:
             item = Listing.objects.get(pk=listing_id)
-            user=request.user()
+            user=request.user
             if int(bid) <= item.bid:
                 return render(request, "auctions/listing.html", {"listing":item_details})
             item.bid = int(bid)
