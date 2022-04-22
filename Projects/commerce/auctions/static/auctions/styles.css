@@ -31,9 +31,3 @@ ul {
     max-height: fit-content;
     max-width:50%;
 }
-
-#base_details_sec {
-    max-width: 50%;
-    max-height: fit-content;
-    float: right;
-}
