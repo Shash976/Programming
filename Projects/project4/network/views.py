@@ -63,7 +63,7 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, first_name, last_name, password)
+            user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, password=password)
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
