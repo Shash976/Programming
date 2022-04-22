@@ -6,17 +6,15 @@
     <div class="dix">
         {% for listing in listings %}
             <ul>
-                <div id="listing">
+                <div class="listing">
                     <li>
-                        <div id="base_details_sec">
-                            <h2><a href="{{listing.id}}">{{listing.title}}</a></h2>
-                            <br>
-                            Current Price - ${{listing.bid}}
-                            <br>
-                            [Listed by: {{listing.user}}] 
-                            <br>
-                            {{listing.description}}
-                        </div>
+                        <h2><a href="{{listing.id}}">{{listing.title}}</a></h2>
+                        <br>
+                        Current Price - ${{listing.bid}}
+                        <br>
+                        [Listed by: {{listing.user}}] 
+                        <br>
+                        {{listing.description}}
                         {% if listing.image %}
                         <div id="image_sec">
                             <img src={{listing.image}} class="listing_image">           

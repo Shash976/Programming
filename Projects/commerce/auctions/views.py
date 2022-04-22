@@ -5,9 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from django.contrib.auth.decorators import login_required
-import markdown2
 from .models import *
-from PIL import Image
 from .forms import *
 
 def index(request):
