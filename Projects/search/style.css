@@ -1,11 +1,15 @@
 * {
     padding: 20px;
 }
-.x {
+/*.x {
     margin: auto;
     width: 50%;
     border: 3px solid green;
     padding: 10px;
     text-align: center;
     height: 50%;
+}*/
+
+.searchbar {
+    border-radius: 50px;
 }
