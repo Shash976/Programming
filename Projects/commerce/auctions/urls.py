@@ -13,7 +13,7 @@ urlpatterns = [
     path("create", views.create_listing, name="create"),
     path("categories", views.categories, name="categories"),
     path("<int:listing_id>", views.listing, name="listing"),
-    path("<str:category>", views.category, name="category"),
+    path("category", views.category, name="category"),
 ]
 
 if settings.DEBUG:

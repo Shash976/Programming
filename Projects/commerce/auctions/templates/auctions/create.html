@@ -6,8 +6,8 @@
 <div id="dix">
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form}}
-       <select name="category">
+        {{form.as_p}}
+        <select name="category">
             {% for category in categories %}
                 <option value="{{ category.id }}">{{ category }}</option>
             {% endfor %}

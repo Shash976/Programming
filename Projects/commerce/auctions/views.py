@@ -72,7 +72,7 @@ def create_listing(request):
             user = request.user
             image = form.cleaned_data["image"]
             category = Category.objects.get(id=int(request.POST["category"]))
-        listing=Listing.objects.create(title=title, description=description, bid=starting_bid, user=user, image=image)
+        listing=Listing.objects.create(title=title, description=description, bid=starting_bid, seller=user, image=image)
         listing.save
         category.listings.add(listing)
         return HttpResponseRedirect(reverse("index"))
