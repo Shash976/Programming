@@ -7,7 +7,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import *
-from PIL import Image
+
 
 def index(request):
     listings = Listing.objects.all()
@@ -69,10 +69,10 @@ def create_listing(request):
             description = form.cleaned_data["description"]
             title = form.cleaned_data["listing_title"]
             starting_bid = form.cleaned_data["bid"]
-            username = request.user
+            user = request.user
             image = form.cleaned_data["image"]
             category = Category.objects.get(id=int(request.POST["category"]))
-        listing=Listing.objects.create(title=title, description=description, bid=starting_bid, user=username, image=image)
+        listing=Listing.objects.create(title=title, description=description, bid=starting_bid, user=user, image=image)
         listing.save
         category.listings.add(listing)
         return HttpResponseRedirect(reverse("index"))

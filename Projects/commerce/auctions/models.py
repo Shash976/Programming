@@ -17,7 +17,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=1000)
     bid = models.IntegerField()
-    user = models.CharField(max_length=24)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lisitings')
     image=models.ImageField(upload_to='media/', blank=True)
 
     def __str__(self):
