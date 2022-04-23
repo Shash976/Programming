@@ -7,6 +7,7 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import *
+from PIL import Image
 
 def index(request):
     listings = Listing.objects.all()
@@ -95,6 +96,7 @@ def listing(request, listing_id):
             return HttpResponseRedirect(reverse('listing', args=(item.id,)))
     return render(request, "auctions/listing.html", {"listing":item_details})
 
+
 def categories(request):
     return render(request, "auctions/categories.html", {"categories": Category.objects.all()})
 
@@ -102,3 +104,6 @@ def category(request, category):
     c = Category.objects.get(category=category)
     listings = c.listings.all()
     return render(request, "auctions/category.html", {"category":c, "listings":listings})
+
+def watchlist(request):
+    pass

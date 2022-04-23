@@ -12,4 +12,20 @@
 
 .searchbar {
     border-radius: 50px;
+    margin-bottom: 10px;
+    width: 30%;
 }
+
+.links {
+    text-align: right;
+}
+
+.search_button {
+    border-radius: 50px;
+}
+
+#advanced_button {
+    background-color: blue;
+    color: white;
+}
+

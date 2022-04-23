@@ -8,18 +8,16 @@
             <ul>
                 <div class="listing">
                     <li>
+                        {% if listing.image %}
+                        <img src={{listing.image}} class="listing_image">             
+                        {% endif %} 
                         <h2><a href="{{listing.id}}">{{listing.title}}</a></h2>
                         <br>
                         Current Price - ${{listing.bid}}
                         <br>
                         [Listed by: {{listing.user}}] 
                         <br>
-                        {{listing.description}}
-                        {% if listing.image %}
-                        <div id="image_sec">
-                            <img src={{listing.image}} class="listing_image">           
-                        </div>    
-                        {% endif %}                    
+                        {{listing.description}}                   
                     </li>
                 </div>
             </ul>

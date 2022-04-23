@@ -12,14 +12,14 @@ ul {
 }
 .listing_image{
     max-width:100%;
-    height:auto;
+    height:200px;
     float: right;
 }
 .listing::after {
     content: "";
     clear: both;
     display: table;
-  }
+}
 .listing{
     border: 3px solid rgb(167, 167, 167);
     border-radius: 8px;
@@ -27,7 +27,3 @@ ul {
     margin-top: 10px;
 }
 
-#image_sec{
-    max-height: fit-content;
-    max-width:50%;
-}
