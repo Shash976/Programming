@@ -2,25 +2,17 @@
 
 {% block body %}
     <h2>{% block heading %}{{heading}}{% endblock %}</h2>
-
-    <div class="dix">
-        {% for listing in listings %}
-            <ul>
-                <div class="listing">
-                    <li>
-                        {% if listing.image %}
-                        <img src={{listing.image}} class="listing_image">             
-                        {% endif %} 
-                        <h2><a href="{{listing.id}}">{{listing.title}}</a></h2>
-                        <br>
-                        Current Price - ${{listing.bid}}
-                        <br>
-                        [Listed by: {{listing.seller}}] 
-                        <br>
-                        {{listing.description}}                   
-                    </li>
-                </div>
-            </ul>
-        {% endfor %}
+    <div class="w3-row">
+    {% for listing in listings %}
+    <div class="w3-third w3-center">
+    <div class="card">
+        <img src="{{listing.image}}" alt="Denim Jeans" style="width:100%">
+        <h1>Tailored Jeans</h1>
+        <p class="price">$19.99</p>
+        <p>Some text about the jeans..</p>
+        <p><button>Add to Cart</button></p>
+      </div>
     </div>
+{% endfor %}
+</div>
 {% endblock %}
