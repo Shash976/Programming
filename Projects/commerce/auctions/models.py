@@ -30,7 +30,7 @@ class Watchlist(models.Model):
     listings = models.ManyToManyField(Listing, blank=True)
 
     def __str__(self):
-        return f"{self.user}\'s Watchlist"
+        return f"{self.user}\'s Watchlist [{len(self.listings.all())} listing(s)]"
 
 class Bid(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Bids")

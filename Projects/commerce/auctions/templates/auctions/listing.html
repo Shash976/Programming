@@ -1,8 +1,14 @@
 {% extends 'auctions/layout.html' %}
 {% block body %}
-    <h2 id="title">{{listing.title}}</h2>
+    <div class="top_div">
+        <h2 id="title">{{listing.title}}</h2>
+        {% if listing in Watchlist%}
+        <span style="float:right" id="watchlist">Remove from Watchlist</span>
+        {% else %}
+        <span style="float:right" id="watchlist">Add to Watchlist</span>
+        {% endif %}
+    </div>
     <div id="content">
-        <div id="base_details_sec">
             {% if user.is_authenticated %}
             <form action="" method="post">
                 {% csrf_token %}
@@ -16,11 +22,8 @@
             [Listed by: {{listing.seller}}] 
             <br>
             {{listing.description}}
-        </div>
         {% if listing.image %}
-        <div id="image_sec">
-            <img src={{listing.image}} class="listing_image">
-        </div>    
+            <img src={{listing.image}} class="listing_image">    
         {% endif %} 
     </div>
 

@@ -92,19 +92,30 @@ def create_listing(request):
         "red": None,
         })
 
+@csrf_exempt
+def watchlist(user, listing):
+    watchlist = Watchlist.objects.get(user=user)
+    listings = watchlist.listings.all()
+    if listing in listings:
+        listings.exclude(pk=listing.id)
+    else:
+        watchlist.listings.set(str(listing.id))
+
 def listing(request, listing_id):
     item_details = Listing.objects.get(pk=listing_id)
+    account = request.user
     if request.method == "POST":
         bid = request.POST.get("bid")
         if request.user.is_authenticated:
             item = Listing.objects.get(pk=listing_id)
             user=request.user
+            watchlist(user, item)
             if int(bid) <= item.bid:
                 return render(request, "auctions/listing.html", {"listing":item_details})
             item.bid = int(bid)
             item.save()
             return HttpResponseRedirect(reverse('listing', args=(item.id,)))
-    return render(request, "auctions/listing.html", {"listing":item_details})
+    return render(request, "auctions/listing.html", {"listing":item_details, "Watchlist":Watchlist.objects.get(user=account)})
 
 
 def categories(request):
@@ -114,13 +125,3 @@ def category(request, category):
     c = Category.objects.get(category=category)
     listings = c.listings.all()
     return render(request, "auctions/category.html", {"category":c, "listings":listings})
-
-@csrf_exempt
-def watchlist(request, listing):
-    user = request.user
-    watchlist = Watchlist.objects.get(user=user)
-    listings = watchlist.listings.all()
-    if listing in listings:
-        listings.exclude(pk=listing.id)
-    else:
-        watchlist.listings.set(str(listing.id))
