@@ -15,6 +15,13 @@ class Listing(models.Model):
     def __str__(self):
         return f"{self.title}: ${self.bid} (Current Bid by: {self.seller})[Listed by: {self.seller}]"
 
+class Watchlist(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="watchlist")
+    listings = models.ManyToManyField(Listing, blank=True)
+
+    def __str__(self):
+        return f"{self.user}\'s Watchlist [{len(self.listings.all())} listing(s)]"
+
 class Category(models.Model):
     category = models.CharField(max_length=20)
     listings = models.ManyToManyField(Listing, related_name="categories", blank=True)
@@ -25,12 +32,7 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "categories"
 
-class Watchlist(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="watchlist")
-    listings = models.ManyToManyField(Listing, blank=True)
 
-    def __str__(self):
-        return f"{self.user}\'s Watchlist [{len(self.listings.all())} listing(s)]"
 
 class Bid(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Bids")
