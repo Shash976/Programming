@@ -16,11 +16,12 @@ ul {
     height:200px;
     float: right;
 }
-.listing::after {
+.listing::after, .content::after{
     content: "";
     clear: both;
     display: table;
 }
+
 .listing{
     border: 3px solid rgb(167, 167, 167);
     border-radius: 8px;

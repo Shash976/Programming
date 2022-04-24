@@ -103,19 +103,19 @@ def watchlist(user, listing):
 
 def listing(request, listing_id):
     item_details = Listing.objects.get(pk=listing_id)
-    account = request.user
     if request.method == "POST":
         bid = request.POST.get("bid")
         if request.user.is_authenticated:
             item = Listing.objects.get(pk=listing_id)
-            user=request.user
-            watchlist(user, item)
             if int(bid) <= item.bid:
                 return render(request, "auctions/listing.html", {"listing":item_details})
             item.bid = int(bid)
             item.save()
             return HttpResponseRedirect(reverse('listing', args=(item.id,)))
-    return render(request, "auctions/listing.html", {"listing":item_details, "Watchlist":Watchlist.objects.get(user=account)})
+    if request.user.is_authenticated:
+        user = request.user
+        return render(request, "auctions/listing.html", {"listing":item_details, "Watchlist":Watchlist.objects.get(user=user)})
+    return render(request, "auctions/listing.html", {"listing":item_details})
 
 
 def categories(request):
