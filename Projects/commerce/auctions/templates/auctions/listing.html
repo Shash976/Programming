@@ -4,7 +4,7 @@
         {% if Watchlist %}
         <form action="" method="post">
             {% csrf_token %}
-            {% if listing in Watchlist%}
+            {% if listing in Watchlist.listings.all%}
             <input type="hidden" name="watchlist" value="0">
             <input type="submit" style="float:right" value="Remove from Watchlist">
             {% else %}

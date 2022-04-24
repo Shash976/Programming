@@ -12,7 +12,7 @@ from .forms import *
 
 def index(request):
     listings = Listing.objects.all()
-    return render(request, "auctions/index.html", {"listings": listings})
+    return render(request, "auctions/index.html", {"listings": listings, "heading": "Active Listings"})
 
 def login_view(request):
     if request.method == "POST":
@@ -92,25 +92,32 @@ def create_listing(request):
         "red": None,
         })
 
-@csrf_exempt
-def watchlist(user, listing):
+@login_required
+def watchlist(request):
+    user= request.user
     watchlist = Watchlist.objects.get(user=user)
     listings = watchlist.listings.all()
-    if listing in listings:
-        listings.exclude(pk=listing.id)
-    else:
-        watchlist.listings.set(str(listing.id))
+    return render(request, "auctions/index.html", {"watchlist":watchlist, "listings":listings, "heading":f"{request.user.username}\'s Watchlist"})
 
 def listing(request, listing_id):
     item_details = Listing.objects.get(pk=listing_id)
     if request.method == "POST":
-        bid = request.POST.get("bid")
         if request.user.is_authenticated:
             item = Listing.objects.get(pk=listing_id)
-            if int(bid) <= item.bid:
-                return render(request, "auctions/listing.html", {"listing":item_details})
-            item.bid = int(bid)
-            item.save()
+            bid = request.POST.get("bid")
+            if bid != None:
+                if int(bid) <= item.bid:
+                    return render(request, "auctions/listing.html", {"listing":item_details})
+                item.bid = int(bid)
+                item.save()
+            status = request.POST.get("watchlist")
+            if status != None:
+                watchlist = Watchlist.objects.get(user=request.user)
+                listings = watchlist.listings.all()
+                if item in listings:
+                    request.user.watchlist.listings.remove(item)
+                else:
+                    request.user.watchlist.listings.add(item)
             return HttpResponseRedirect(reverse('listing', args=(item.id,)))
     if request.user.is_authenticated:
         user = request.user

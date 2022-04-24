@@ -1,4 +1,3 @@
-from venv import create
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
@@ -12,6 +11,7 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("create", views.create_listing, name="create"),
     path("categories", views.categories, name="categories"),
+    path("watchlist", views.watchlist, name="watchlist"),
     path("<int:listing_id>", views.listing, name="listing"),
     path("category", views.category, name="category"),
 ]
