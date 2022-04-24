@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .forms import *
 
@@ -37,6 +38,9 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("index"))
 
 def register(request):
+    unusable_names = ['admin', 'categories', 'watchlist']
+    for cat in Category.objects.all():
+        unusable_names.append(cat.category)
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -51,12 +55,18 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
+            if username.upper() not in (name.upper() for name in unusable_names):
+                user = User.objects.create_user(username=username, email=email, password=password)
+                user.save()
+                Watchlist.objects.create(user=user)
+            else:
+                return render(request, "auctions/register.html", {
+                "message": "Username cannot be taken."
+            })
         except IntegrityError:
             return render(request, "auctions/register.html", {
                 "message": "Username already taken."
-            })
+            })  
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
@@ -105,5 +115,12 @@ def category(request, category):
     listings = c.listings.all()
     return render(request, "auctions/category.html", {"category":c, "listings":listings})
 
-def watchlist(request):
-    pass
+@csrf_exempt
+def watchlist(request, listing):
+    user = request.user
+    watchlist = Watchlist.objects.get(user=user)
+    listings = watchlist.listings.all()
+    if listing in listings:
+        listings.exclude(pk=listing.id)
+    else:
+        watchlist.listings.set(str(listing.id))

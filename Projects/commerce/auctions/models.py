@@ -26,7 +26,7 @@ class Category(models.Model):
         verbose_name_plural = "categories"
 
 class Watchlist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="watchlist")
     listings = models.ManyToManyField(Listing, blank=True)
 
     def __str__(self):
@@ -34,4 +34,4 @@ class Watchlist(models.Model):
 
 class Bid(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Bids")
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="BIds")
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="Bids")
