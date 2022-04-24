@@ -32,8 +32,6 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "categories"
 
-
-
 class Bid(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Bids")
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="Bids")
