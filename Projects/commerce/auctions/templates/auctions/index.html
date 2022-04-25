@@ -11,7 +11,7 @@
               <h5 class="card-title">{{ listing.title }}</h5>
               <p class="card-text">{{ listing.description }}</p>
               <p class="card-text">Price - ${{ listing.bid }}</p>
-              <a href="#" class="btn btn-primary">Bid Now</a>
+              <a href="{{listing.id}}" class="btn btn-primary">Bid Now</a>
           </div>
         </div>
         {% endfor %}
