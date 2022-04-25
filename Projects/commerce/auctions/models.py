@@ -10,12 +10,12 @@ class Listing(models.Model):
     description = models.TextField()
     base_price = models.IntegerField()
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
-    image=models.ImageField(upload_to='media/', blank=True)
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidded_on", blank=True)
+    image = models.ImageField(upload_to='media/', blank=True)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidded_on")
     bid = models.IntegerField(blank=True)
 
     def __str__(self):
-        return f"{self.title}: ${self.bid} (Current Bid by: {self.seller})[Listed by: {self.seller}]"
+        return f"{self.title}"
 
 class Watchlist(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="watchlist")
