@@ -8,10 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .forms import *
+import datetime
 
 
 def index(request):
-    listings = Listing.objects.all()
+    listings = Listing.objects.filter(active=True).order_by('-id')
     return render(request, "auctions/index.html", {"listings": listings, "heading": "Active Listings"})
 
 def login_view(request):
@@ -78,11 +79,11 @@ def create_listing(request):
         if form.is_valid():
             description = form.cleaned_data["description"]
             title = form.cleaned_data["listing_title"]
-            starting_bid = form.cleaned_data["bid"]
+            starting_price = form.cleaned_data["starting_price"]
             user = request.user
             image = form.cleaned_data["image"]
             category = Category.objects.get(id=int(request.POST["category"]))
-        listing=Listing.objects.create(title=title, description=description, bid=starting_bid, seller=user, image=image)
+        listing=Listing.objects.create(title=title, description=description, starting_price=starting_price, seller=user, image=image)
         listing.save
         category.listings.add(listing)
         return HttpResponseRedirect(reverse("index"))
@@ -100,16 +101,19 @@ def watchlist(request):
     return render(request, "auctions/index.html", {"watchlist":watchlist, "listings":listings, "heading":f"{request.user.username}\'s Watchlist"})
 
 def listing(request, listing_id):
-    item_details = Listing.objects.get(pk=listing_id)
+    item = Listing.objects.get(pk=listing_id)
     if request.method == "POST":
         if request.user.is_authenticated:
             item = Listing.objects.get(pk=listing_id)
             bid = request.POST.get("bid")
             if bid != None:
-                if int(bid) <= item.bid:
-                    return render(request, "auctions/listing.html", {"listing":item_details})
-                item.bid = int(bid)
-                item.save()
+                if int(bid) > item.current_price:
+                    b = Bid.objects.create(buyer=request.user, listing=item, bid=int(bid))
+                    item.current_price = int(bid)
+                    item.save()
+                    b.save()
+                else:
+                    return render(request, "auctions/listing.html", {"listing":item, "message": "Bid should be more than current price"})
             status = request.POST.get("watchlist")
             if status != None:
                 watchlist = Watchlist.objects.get(user=request.user)
@@ -118,11 +122,22 @@ def listing(request, listing_id):
                     request.user.watchlist.listings.remove(item)
                 else:
                     request.user.watchlist.listings.add(item)
+            closed = request.POST.get("close")
+            if closed != None:
+                item.active = False
+                item.save()
+                return render(request, "auctions/listing.html", {"listing":item,"closed":True, "comments": item.comments.all(), "buyer": item.bids.get(bid=item.current_price).buyer})
+            comment=request.POST["comment"]
+            if comment != None:
+                new_comment = Comment.objects.create(user=request.user, listing=item, comment=comment, time=datetime.datetime.now())
             return HttpResponseRedirect(reverse('listing', args=(item.id,)))
     if request.user.is_authenticated:
         user = request.user
-        return render(request, "auctions/listing.html", {"listing":item_details, "Watchlist":Watchlist.objects.get(user=user)})
-    return render(request, "auctions/listing.html", {"listing":item_details})
+        if item.active == False:
+            return render(request, "auctions/listing.html", {"listing":item,"closed":True, "comments": item.comments.all(), "buyer": item.bids.get(bid=item.current_price).buyer})
+        return render(request, "auctions/listing.html", {"listing":item,"Watchlist":Watchlist.objects.get(user=user), "comments": item.comments.all(), "form":NewCommentForm()})
+    
+    return render(request, "auctions/listing.html", {"listing":item, "comments": item.comments.all()})
 
 
 def categories(request):
@@ -130,5 +145,10 @@ def categories(request):
 
 def category(request, category):
     c = Category.objects.get(category=category)
-    listings = c.listings.all()
-    return render(request, "auctions/category.html", {"category":c, "listings":listings})
+    listings = c.listings.filter(active=True)
+    return render(request, "auctions/index.html", {"heading":f"Active Listings under {c.category}", "listings":listings})
+
+def person_listings(request, username):
+    user = User.objects.get(username=username)
+    listings = user.listings.all()
+    return render(request, "auctions/index.html", {"heading":f"{user.username}\'s Listings", "listings":listings})

@@ -3,19 +3,25 @@ from django.db import models
 
 
 class User(AbstractUser):
-    test = models.TextField(blank=True)
+    pass
 
 class Listing(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField()
-    base_price = models.IntegerField()
+    starting_price = models.IntegerField()
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
     image=models.ImageField(upload_to='media/', blank=True)
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidded_on", blank=True)
-    bid = models.IntegerField(blank=True)
+    current_price = models.IntegerField(blank=True, null=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.title}: ${self.bid} (Current Bid by: {self.seller})[Listed by: {self.seller}]"
+        if self.bids.all() != []:
+            return f"{self.title}: ${self.current_price} [Listed by: {self.seller}]"
+    def save(self, *args, **kwargs):
+        if self.current_price == None:
+            self.current_price = self.starting_price
+        super(Listing, self).save(*args, **kwargs)
+
 
 class Watchlist(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="watchlist")
@@ -35,6 +41,19 @@ class Category(models.Model):
         verbose_name_plural = "categories"
 
 class Bid(models.Model):
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="Bids")
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="Bids")
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidded_on")
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
     bid = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.buyer.username} bids ${self.bid} on {self.listing.title}"
+
+class Comment(models.Model):
+    id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='comments')
+    comment = models.TextField()
+    time = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.user}\'s comment on {self.listing.title}"
