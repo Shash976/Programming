@@ -17,7 +17,7 @@ urlpatterns = [
     path("create", views.create_listing, name="create"),
     path("categories", views.categories, name="categories"),
     path("watchlist", views.watchlist, name="watchlist"),
-    re_path(listings, views.listing, name="listing"),
+    path("<int:listing_id>", views.listing, name="listing"),
     re_path(categories, views.category, name="category"),
     re_path(users, views.person_listings, name="person_listings")
 ]

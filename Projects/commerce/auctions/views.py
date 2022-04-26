@@ -127,7 +127,7 @@ def listing(request, listing_id):
                 item.active = False
                 item.save()
                 return render(request, "auctions/listing.html", {"listing":item,"closed":True, "comments": item.comments.all(), "buyer": item.bids.get(bid=item.current_price).buyer})
-            comment=request.POST["comment"]
+            comment=request.POST.get("comment")
             if comment != None:
                 new_comment = Comment.objects.create(user=request.user, listing=item, comment=comment, time=datetime.datetime.now())
             return HttpResponseRedirect(reverse('listing', args=(item.id,)))
