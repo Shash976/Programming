@@ -10,6 +10,7 @@ class Listing(models.Model):
     description = models.TextField()
     starting_price = models.IntegerField()
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
+<<<<<<< HEAD
     image=models.ImageField(upload_to='media/', blank=True)
     current_price = models.IntegerField(blank=True, null=True)
     active = models.BooleanField(default=True)
@@ -22,6 +23,14 @@ class Listing(models.Model):
             self.current_price = self.starting_price
         super(Listing, self).save(*args, **kwargs)
 
+=======
+    image = models.ImageField(upload_to='media/', blank=True)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bidded_on")
+    bid = models.IntegerField(blank=True)
+
+    def __str__(self):
+        return f"{self.title}"
+>>>>>>> d35904d3c5c51208c57ad6a13ae8891b3e8dbf0c
 
 class Watchlist(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="watchlist")
