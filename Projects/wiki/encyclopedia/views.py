@@ -1,18 +1,17 @@
 from django.shortcuts import render
 from . import util
+from .forms import *
 import re
 import markdown2
 import random
-from django import forms
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 # Create your views here.
-class NewPageForm(forms.Form):
-    page_entry=forms.CharField(widget=forms.Textarea, label="Create New Page")
 
-class NewTitleForm(forms.Form):
-    page_title = forms.CharField(label="Enter Title")
+def markdown_to_html(markdown_content):
+    html_content = markdown2.markdown(markdown_content)
+    return html_content
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -20,17 +19,17 @@ def index(request):
     })
 
 def entry(request, title):
-    content=convert(title)
-    heading=re.search(title, content, re.IGNORECASE)
-    if content == None:
+    markdown_content=util.get_entry(title)
+    if markdown_content == None:
         return render(request, "encyclopedia/error.html")
-    return render(request, "encyclopedia/entry.html", {"content":content, "title": heading[0]})
+    html_content = markdown_to_html(markdown_content)
+    return render(request, "encyclopedia/entry.html", {"content":html_content, "title": title})
     
 
 def search(request):
-    total_entries=util.list_entries()
-    query = request.GET.get('q')
-    results=[]
+    total_entries=util.list_entries() 
+    query = request.GET.get('q') #search_query
+    results=[] #search_results
     for entry in total_entries:
         if re.search(query, entry, re.IGNORECASE):
             results.append(entry)
@@ -43,31 +42,24 @@ def search(request):
 
 def new_page(request):
     if request.method == "POST":
-        t_form = NewTitleForm(request.POST)
-        c_form = NewPageForm(request.POST)
-        if c_form.is_valid() and t_form.is_valid():
-            content = c_form.cleaned_data["page_entry"]
-            title = t_form.cleaned_data["page_title"]
+        form = NewEntryForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            markdown_content = form.cleaned_data["content"]
             if title not in util.list_entries():
-                util.save_entry(title, content)
-                return render(request, "encyclopedia/entry.html", {"content":content, "title": title.upper()})
-            else:
-                return render(request, "encyclopedia/create.html", {"red": True})
-        else:
-            return render(request, "encyclopedia/create.html", {"textarea": NewPageForm(), "title": NewTitleForm()})
+                util.save_entry(title, markdown_content)
+                return HttpResponseRedirect(reverse("encyclopedia:entry", kwargs={'title':title}))
     return render(request, "encyclopedia/create.html", {
-        "textarea": NewPageForm(),
-        "title": NewTitleForm(),
-        "red": None,
+        "form": NewEntryForm()
         })
 
 def edit_page(request, title):
-    content=convert(title)
+    markdown_content=util.get_entry(title)
     if request.method == "POST":
         new_content = request.POST.get("content")
         util.save_entry(title, new_content)
         return HttpResponseRedirect(reverse("encyclopedia:entry", kwargs={'title': title}))
-    return render(request, "encyclopedia/edit.html", {"title":title, "content":content})
+    return render(request, "encyclopedia/edit.html", {"title":title, "content":markdown_content})
 
 def random_page(request):
     total_entries=util.list_entries()
@@ -75,8 +67,3 @@ def random_page(request):
     lucky_num = random.randrange(total)
     title = total_entries[lucky_num]
     return HttpResponseRedirect(reverse("encyclopedia:entry", kwargs={'title': title}))
-
-def convert(title):
-    content=util.get_entry(title)
-    converted = markdown2.markdown(content)
-    return converted

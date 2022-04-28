@@ -1,3 +1,3 @@
-<h1>Django</h1>
+#Django
 
-<p>Django is a web framework written using <a href="/Python">Python</a> that allows for the design of web applications that generate <a href="/HTML">HTML</a> dynamically.</p>
+Django is a web framework that uses [Python](/Python) and [SQLite3](/SQL)
