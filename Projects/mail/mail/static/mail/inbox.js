@@ -147,7 +147,7 @@ function load_email(email_id) {
   .then(response => response.json())
   .then(email => {
     document.querySelector('#email-view').innerHTML = `<h3>${email.subject}</h3><br/><div id="email"></div>`;
-    document.querySelector('#email').innerHTML = `<h5>From: ${email.sender} <br/> To: ${email.recipients} <br/></h5><p>${email.body}</p>`
+    document.querySelector('#email').innerHTML = `<h5>From: ${email.sender} <br/> To: ${email.recipients} <br/></h5><br><p>${email.body}</p>`
   })
   fetch(`/emails/${email_id}`, {
     method: 'PUT',
