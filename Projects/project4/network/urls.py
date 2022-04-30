@@ -6,6 +6,9 @@ from . import views
 from .models import *
 
 users = f"({('|').join([user.username for user in User.objects.all()])})"
+posts_ids = f"posts/({('|').join([str(post.id) for post in Post.objects.all()])})"
+
+#app_name = "network"
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -16,8 +19,9 @@ urlpatterns = [
     path("following", views.following, name="following"),
 
     #Regex Paths
-    re_path(r'posts/(\d+)', views.likes, name="likes"), #(API Route)
-    re_path(users, views.profile, name="profile")
+    re_path(f"{posts_ids}/edit", views.edit, name="edit"),
+    re_path(posts_ids, views.likes, name="likes"), #(API Route)
+    re_path(users, views.profile, name="profile"),
 ]
 
 if settings.DEBUG:
