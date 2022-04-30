@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse_lazy
 
 from .forms import NewPostForm
 from .models import User, Post
@@ -43,6 +44,7 @@ def login_view(request):
     else:
         return render(request, "network/login.html")
 
+@login_required(login_url=reverse_lazy("login"))
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -74,7 +76,7 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-@login_required
+@login_required(login_url=reverse_lazy("login"))
 def new_post(request):
     if request.method == "POST":
         form = NewPostForm(request.POST, request.FILES)
@@ -111,7 +113,7 @@ def profile(request, username):
     else:
         return HttpResponse('User Does not Exist')
 
-@login_required
+@login_required(login_url=reverse_lazy("login"))
 def following(request):
     user = request.user
     accounts = user.follows.all()
@@ -125,7 +127,7 @@ def following(request):
     return render(request, "network/index.html", {"posts":page_obj})
 
 @csrf_exempt
-@login_required
+@login_required(login_url=reverse_lazy("login"))
 def likes(request, post_id):
     try:
         post = Post.objects.get(pk=post_id)
