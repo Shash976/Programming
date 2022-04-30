@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll(".post").forEach(post => {
         post.querySelector("#unlike").addEventListener('click', () => like(post, 'unlike'));
-        post.querySelector("#content").addEventListener('dblclick', () => like(post, 'like'));
+        post.querySelector("#like").addEventListener('click', () => like(post, 'like'));
     });
 });
 
@@ -13,13 +13,13 @@ function like(post, condition) {
     } else if (condition == "unlike") {
         post_likes--
     }    
-    fetch(`/${post_id}`, {
+    fetch(`/posts/${post_id}`, {
         method: 'PUT',
         body: JSON.stringify({
             likes: post_likes
         })
     })
-    fetch(`/${post_id}`)
+    fetch(`/posts/${post_id}`)
     .then(response => response.json())
     .then(data => {
         post.querySelector("#likes").innerHTML = data.likes;

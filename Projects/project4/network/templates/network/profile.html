@@ -1,6 +1,6 @@
-{% extends "network/layout.html" %}
+{% extends "network/index.html" %}
 
-{% block body %}
+{% block profile %}
 
     <div><h1>{{profile.username}}</h1><h3>Following - {{profile.follows.all|length}} | Followers - {{profile.followed_by.all|length}} </h3></div>
     <p>{{profile.description}}</p>
@@ -16,30 +16,6 @@
         </form>
     {% endif %}
     <br>
-
-    {% if posts %}
-    <ul id="all_posts">
-        {% for post in posts %}
-            <div class="post">
-                <li>
-                    <div id="content">
-                        <h2>{{post.user.first_name}} {{post.user.last_name}}</h2><small>{{post.time}}</small>
-                        <br>
-                        <p>{{post.content}}</p>
-                    </div>
-                    {% if post.image %}
-                    <div id="image">
-                        <img src={{post.image}} class="post_image">           
-                    </div>    
-                    {% endif %}
-                    <small>❣️{{post.likes}}</small>
-                </li>
-            </div>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <h1>No Posts.</h1>
-    {% endif %}
 
 
 {% endblock %}
