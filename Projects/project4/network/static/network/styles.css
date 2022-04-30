@@ -11,10 +11,6 @@ body {
     padding-inline-start: 10px;
 }
 
-.listing_image{
-    max-width:100%;
-    height:auto;
-}
 .post{
     border: 3px solid rgb(167, 167, 167);
     border-radius: 8px;
@@ -22,6 +18,10 @@ body {
     margin-top: 10px;
 }
 
+.post img{
+    max-width:100%;
+    height:200px;
+}
 
 #image_sec{
     max-height: fit-content;
