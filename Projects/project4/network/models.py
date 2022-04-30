@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 import datetime
@@ -16,9 +17,8 @@ class User(AbstractUser):
 class Post(models.Model):
     content = models.CharField(max_length=250)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    image = models.ImageField(upload_to='media/', blank=True)
     time = models.DateTimeField(default=datetime.datetime.now())
-    likes = models.PositiveIntegerField(default=0)
+    likes = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Post by {self.user} at {self.time}"    
@@ -34,3 +34,7 @@ class Post(models.Model):
             "likes": self.likes,
             "time": self.time.strftime("%b %d %Y, %I:%M %p"),
         }
+
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to='media/', blank=True) 

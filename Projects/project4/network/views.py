@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse_lazy
 
 from .forms import NewPostForm
-from .models import User, Post
+from .models import *
 import datetime
 from operator import attrgetter
 import json
@@ -79,17 +79,16 @@ def register(request):
 @login_required(login_url=reverse_lazy("login"))
 def new_post(request):
     if request.method == "POST":
-        form = NewPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            description = form.cleaned_data["description"]
-            username = request.user
-            image = form.cleaned_data["image"]
-        post=Post.objects.create(content=description, user=username, time=datetime.datetime.now(), image=image, likes=0)
+        username = request.user
+        description = request.POST.get('content')
+        images = request.FILES.getlist('images')
+        post=Post.objects.create(content=description, user=username)
         post.save
+        for image in images:
+            post_image = PostImage.objects.create(post=post, image=image)
+            post_image.save 
         return HttpResponseRedirect(reverse("index"))
-    return render(request, "network/newpost.html", {
-        "form": NewPostForm(),
-        })
+    return render(request, "network/newpost.html")
 
 def profile(request, username):        
     if request.method == "POST":
@@ -148,9 +147,11 @@ def likes(request, post_id):
 @login_required(login_url=reverse_lazy("login"))
 def edit(request, post_id):
     post = Post.objects.get(id=post_id)
-    if request.method == "POST" and request.user.is_authenticated and request.user == post.user:
-        new_content = request.POST.get("content")
-        post.content = new_content
-        post.save()
-        return HttpResponseRedirect(reverse("index"))
-    return render(request, "network/edit.html", {"post": post})
+    if request.user.is_authenticated and request.user == post.user:
+        if request.method == "POST":
+            new_content = request.POST.get("content")
+            post.content = new_content
+            post.save()
+            return HttpResponseRedirect(reverse("index"))
+        return render(request, "network/edit.html", {"post": post})
+    return HttpResponseRedirect(reverse('index'))
