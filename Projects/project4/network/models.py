@@ -18,7 +18,7 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     image = models.ImageField(upload_to='media/', blank=True)
     time = models.DateTimeField(default=datetime.datetime.now())
-    likes = models.IntegerField(default=0)
+    likes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Post by {self.user} at {self.time}"    
