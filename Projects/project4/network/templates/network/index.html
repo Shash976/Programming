@@ -5,6 +5,9 @@
     {% for post in posts %}
             <div class="post">
                 <li>
+                    {% if user.is_authenticated and user == post.user%}
+                    <a href="/posts/{{post.id}}/edit">EDIT</a>
+                    {%endif%}
                     <p id="post_id" hidden>{{post.id}}</p>
                     <h2><a href="{{post.user}}">{{post.user.first_name}} {{post.user.last_name}}</a></h2><small>{{post.time}}</small>
                     <div id="content">

@@ -144,3 +144,13 @@ def likes(request, post_id):
             post.likes = data.get("likes")
         post.save()
         return HttpResponse(status=204)
+
+@login_required(login_url=reverse_lazy("login"))
+def edit(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.method == "POST" and request.user.is_authenticated and request.user == post.user:
+        new_content = request.POST.get("content")
+        post.content = new_content
+        post.save()
+        return HttpResponseRedirect(reverse("index"))
+    return render(request, "network/edit.html", {"post": post})
