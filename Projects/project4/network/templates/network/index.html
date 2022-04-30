@@ -16,14 +16,15 @@
                         <p>{{post.content}}</p>
                     </div>
                     {% if post.images %}
-                    <div class="images">
+                    <div class="row">
                         {%for image in post.images.all %}
-                        <div id="image">
+                        <div id="image" class="col-md-4">
                             <img src={{image.image}}>           
                         </div>
-                        <br>
+                        
                         {%endfor%}                        
                     </div>
+                    <br>
                     {% endif %}
                     <p><span><button id="like">👍🏻</button></span>      <span id="likes">{{post.likes}}</span>          <span><button id="unlike">👎🏻</button></span></p>
                 </li>
