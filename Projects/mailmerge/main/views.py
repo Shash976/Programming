@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 
 from .forms import NewEmailForm, NewRecipientForm
 from .models import Recipient
-from .convert import csv_to_json, excel_to_json
+from .convert import *
 
 import re
 import smtplib
@@ -49,30 +49,18 @@ def process_email(content, subject, to):
     server_ssl.login("itshashgoel@gmail.com", "superuchihalevidino")
     
     untouched = content
-    rc = {}
     recipients = to.strip().split(',')
     for recipient in recipients:
         content = untouched
         recipient=recipient.strip()
-        person = Recipient.objects.get(email=recipient)
-        cp = r'`(\w+)`'
-        results = re.findall(cp, content)
+        person = Recipient.objects.get(email=recipient).serialize()
+        results = re.findall(r'`(\w+)`', content)
         for result in results:
-            omit = f'`{result}`'
-            if result == 'first_name':
-                content = re.sub(omit, person.first_name, content)
-            elif result == 'last_name':
-                content = re.sub(omit, person.last_name, content)
-            elif result == 'email':
-                content = re.sub(omit, person.email, content)
-            elif result == 'address':
-                content = re.sub(omit, person.address, content)
-        dict = {recipient: content}
-        rc.update(dict)
+            content = re.sub(f'`{result}`', person[result], content)
         server_ssl.sendmail("itshashgoel@gmail.com", recipient, content)
     server_ssl.quit()
 
-def recipients(filepath):
+def get_recipients(filepath):
     if re.search(r'.xslx$', filepath):
         json_file = excel_to_json(filepath)
     elif re.search(r'.csv$', filepath):

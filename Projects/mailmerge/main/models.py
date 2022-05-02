@@ -10,6 +10,15 @@ class Recipient(models.Model):
     def __str__(self) -> str:
         return f"{self.email} - {self.first_name}"
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "address" :self.address 
+        }
+
 class CSV(models.Model):
     csv_file = models.FileField(upload_to="media/")
     date_uploaded = models.DateTimeField(auto_now=True)
