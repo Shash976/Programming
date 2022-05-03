@@ -31,12 +31,15 @@ def create_recipient(request):
 
 def index(request):
     if request.method == "POST":
-        form = NewEmailForm(request.POST)
+        form = NewEmailForm(request.POST, request.FILES)
         if form.is_valid():
-            content = form.cleaned_data["content"]
+            body = form.cleaned_data["content"]
             subject = form.cleaned_data["subject"]
-            recipients = form.cleaned_data["to"]
-        process_email(content=content, subject=subject, to=recipients)
+            recipients = form.cleaned_data["recipients"]
+        mail = Mail.objects.create(user=request.user, file=recipients, body=body)
+        mail.save
+        recipients_tuple = get_recipients(mail.file)
+        process_email(content=body, subject=subject)
     return render(request, "main/index.html", {
         "form": NewEmailForm(),
         })
@@ -71,3 +74,16 @@ def get_recipients(filepath):
     with open(json_file) as file:
         data = json.load(file)
 
+def process_email(content, subject, recipients):    
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.connect("smtp.gmail.com",465)
+    server.ehlo()
+    server.login("itshashgoel@gmail.com", "superuchihalevidino")
+    untouched = content
+    for recipient in recipients:
+        content = untouched
+        results = re.findall(r'`(\w+)`', content)
+        for result in results:
+            content = re.sub(f'`{result}`', recipient[result], content)
+        server.sendmail("itshashgoel@gmail.com", recipient["email"], content)
+    server.quit()

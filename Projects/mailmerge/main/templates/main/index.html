@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Mail Merge</title>
-    </head>
-    <body>
-        <h1>Mail Merge</h1>
-        <form method="post">
+{% extends 'main/layout.html'%}
+    {%block body%}
+        <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{form.as_p}}
+            {{form.as_p}}   
             <input type="submit">
         </form>
-    </body>
+    {%endblock%}
 </html>

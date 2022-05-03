@@ -1,28 +1,18 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractUser
+from .convert import *
 
 # Create your models here.
 class User(AbstractUser):
     pass
 
-class Recipient(models.Model):
-    first_name = models.CharField(max_length=35)
-    last_name = models.CharField(max_length=35, blank=True)
-    email = models.EmailField()
-    address = models.CharField(max_length=500, blank=True)
 
-    def __str__(self) -> str:
-        return f"{self.email} - {self.first_name}"
+class Mail(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="mails")
+    file = models.FileField(upload_to="media/", blank=False, validators=[FileExtensionValidator(allowed_extensions=['json', 'xlsx', 'csv'])])
+    json_file = models.FileField(upload_to="media/json/", blank=True, validators=[FileExtensionValidator(allowed_extensions=['json'])])
+    body = models.TextField()
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "email": self.email,
-            "address" :self.address 
-        }
-
-class CSV(models.Model):
-    csv_file = models.FileField(upload_to="media/")
-    date_uploaded = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"{self.user} - {self.file.name[self.file.name.rindex('/') + 1:]}"
