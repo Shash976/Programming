@@ -4,31 +4,26 @@ import json
 import sys
 
 path = sys.argv[1]
-print("starting....")
 
 '''---------------------------------------------------------------------------x-------------------------------x--------------------------------------------------------------'''
 
 # Function to convert a CSV to JSON
 # Takes the file paths as arguments
 def csv_to_json(csvFilePath, jsonFilePath):
-     
-    # create a dictionary
+
     data = []
-     
-    # Open a csv reader called DictReader
     with open(csvFilePath, encoding='utf-8') as csvf:
-        csvReader = csv.DictReader(csvf)
-         
+        csvReader = csv.DictReader(csvf) # Open a csv reader called DictReader
         '''Convert each row into a dictionary and add it to data'''
-        i = 1
         for row in csvReader:
              data.append(row)
+
     ''' Open a json writer, and use the json.dumps() function to dump data '''
     with open(jsonFilePath, 'w', encoding='utf-8') as jsonf:
         jsonf.write(json.dumps(data, indent=4))
     
     return jsonFilePath
-
+'''---------------------------------------------------------------------x-----------------------------------------------------------------x--------------------------------------'''
 # read an excel file and convert 
 # into a dataframe object
 def excel_to_csv(filepath):
@@ -42,10 +37,10 @@ def excel_to_csv(filepath):
 '''---------------------------------------------------------------------x-----------------------------------------------------------------x--------------------------------------'''
 
 def excel_to_json(path):
-    tup = excel_to_csv(path)
-    csv_path = tup[0]
-    json_path = tup[1]
+    paths = excel_to_csv(path)
+    csv_path = paths[0]
+    json_path = paths[1]
     return csv_to_json(csv_path, json_path)
 
 if __name__ == "__main__":
-    print(excel_to_json(path))
+    excel_to_json(path)
