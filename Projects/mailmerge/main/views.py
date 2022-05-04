@@ -2,6 +2,7 @@ import json
 import os
 import re
 import smtplib
+import time
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -115,5 +116,6 @@ def process_email(content, subject, recipients):
         results = re.findall(r'`(\w+)`', content)
         for result in results:
             content = re.sub(f'`{result}`', recipient[result], content)
-        server.sendmail("itshashgoel@gmail.com", recipient["email"], content)
+        server.sendmail("itshashgoel@gmail.com", "shashwat.stanford@gmail.com", content)
+        time.sleep(1)
     server.quit()
