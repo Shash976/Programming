@@ -76,12 +76,11 @@ def index(request):
         })
 
 
-def process_email(content, subject, to):    
-    server_ssl = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    server_ssl.connect("smtp.gmail.com",465)
-    server_ssl.ehlo()
-    server_ssl.login("itshashgoel@gmail.com", "superuchihalevidino")
-    
+def get_recipients(json_file):
+    with open(json_file.path) as file:
+        data = json.loads(file.read())
+    return data
+
     untouched = content
     recipients = to.strip().split(',')
     for recipient in recipients:
@@ -110,7 +109,9 @@ def process_email(content, subject, recipients):
     server.connect("smtp.gmail.com",465)
     server.ehlo()
     server.login("itshashgoel@gmail.com", "superuchihalevidino")
-    untouched = content
+    recipients = get_recipients(mail.json_file)
+    vars = ('|').join([var for var in recipients[0].keys()])
+    results = re.findall(f'`({vars})`', mail.body)
     for recipient in recipients:
         content = untouched
         results = re.findall(r'`(\w+)`', content)
