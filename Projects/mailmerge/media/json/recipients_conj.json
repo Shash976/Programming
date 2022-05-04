@@ -1,0 +1,20 @@
+[
+    {
+        "First Name": "Shashwat",
+        "Last Name": "Goel",
+        "Email": "shashwat.stanford@gmail.com",
+        "City": "Hyderabad"
+    },
+    {
+        "First Name": "Naruto",
+        "Last Name": "Uzumaki",
+        "Email": "uzumaki.naruto@konoha.com",
+        "City": "Konoha"
+    },
+    {
+        "First Name": "Levi",
+        "Last Name": "Ackerman",
+        "Email": "itshashgoel@gmail.com",
+        "City": "Paradis"
+    }
+]

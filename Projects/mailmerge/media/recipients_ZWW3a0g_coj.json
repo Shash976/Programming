@@ -1,0 +1,20 @@
+[
+    {
+        "first_name": "Shashwat",
+        "last_name": "Goel",
+        "email": "shashwat.stanford@gmail.com",
+        "address": "Hyderabad"
+    },
+    {
+        "first_name": "Naruto",
+        "last_name": "Uzumaki",
+        "email": "uzumaki.naruto@konoha.com",
+        "address": "Konoha"
+    },
+    {
+        "first_name": "Levi",
+        "last_name": "Ackerman",
+        "email": "itshashgoel@gmail.com",
+        "address": "Paradis"
+    }
+]
