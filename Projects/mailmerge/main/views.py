@@ -69,8 +69,15 @@ def index(request):
             recipients = form.cleaned_data["recipients"]
         mail = Mail.objects.create(user=request.user, file=recipients, body=body)
         mail.save
-        recipients_tuple = get_recipients(mail.file)
-        process_email(content=body, subject=subject)
+        if re.search(r'.json$', mail.file.name):
+            json_file = mail.file
+        elif re.search(r'.xlsx$', mail.file.name):
+            json_file = excel_to_json(mail.file.path)
+        elif re.search(r'.csv$', mail.file.name):
+            json_file = csv_to_json(mail.file.path)
+        mail.json_file = json_file
+        mail.save()
+        process_email(mail)
     return render(request, "main/index.html", {
         "form": NewEmailForm(),
         })
