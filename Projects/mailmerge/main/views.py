@@ -120,8 +120,7 @@ def process_email(content, subject, recipients):
     vars = ('|').join([var for var in recipients[0].keys()])
     results = re.findall(f'`({vars})`', mail.body)
     for recipient in recipients:
-        content = untouched
-        results = re.findall(r'`(\w+)`', content)
+        content = mail.body
         for result in results:
             content = re.sub(f'`{result}`', recipient[result], content)
         server.sendmail("itshashgoel@gmail.com", "shashwat.stanford@gmail.com", content)
