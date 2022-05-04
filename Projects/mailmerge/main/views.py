@@ -88,30 +88,7 @@ def get_recipients(json_file):
         data = json.loads(file.read())
     return data
 
-    untouched = content
-    recipients = to.strip().split(',')
-    for recipient in recipients:
-        content = untouched
-        recipient=recipient.strip()
-        person = Recipient.objects.get(email=recipient).serialize()
-        results = re.findall(r'`(\w+)`', content)
-        for result in results:
-            content = re.sub(f'`{result}`', person[result], content)
-        server_ssl.sendmail("itshashgoel@gmail.com", recipient, content)
-    server_ssl.quit()
-
-def get_recipients(filepath):
-    if re.search(r'.xslx$', filepath):
-        json_file = excel_to_json(filepath)
-    elif re.search(r'.csv$', filepath):
-        json_file = csv_to_json(filepath)
-    elif re.search(r'.json$', filepath):
-        json_file = filepath
-
-    with open(json_file) as file:
-        data = json.load(file)
-
-def process_email(content, subject, recipients):    
+def process_email(mail):    
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.connect("smtp.gmail.com",465)
     server.ehlo()
