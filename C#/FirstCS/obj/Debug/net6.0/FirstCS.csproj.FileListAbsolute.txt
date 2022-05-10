@@ -1,0 +1,15 @@
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\bin\Debug\net6.0\FirstCS.exe
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\bin\Debug\net6.0\FirstCS.deps.json
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\bin\Debug\net6.0\FirstCS.runtimeconfig.json
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\bin\Debug\net6.0\FirstCS.dll
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\bin\Debug\net6.0\FirstCS.pdb
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\FirstCS.csproj.AssemblyReference.cache
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\FirstCS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\FirstCS.AssemblyInfoInputs.cache
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\FirstCS.AssemblyInfo.cs
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\FirstCS.csproj.CoreCompileInputs.cache
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\FirstCS.dll
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\refint\FirstCS.dll
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\FirstCS.pdb
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\FirstCS.genruntimeconfig.cache
+C:\Users\Sanket Goel\Desktop\Programming\FirstCS\obj\Debug\net6.0\ref\FirstCS.dll
