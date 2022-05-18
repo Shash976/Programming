@@ -1,0 +1,15 @@
+* {
+    box-sizing: border-box;
+  }
+
+body {
+    margin: 10px;
+    padding: 10px;
+}
+
+.checkboxes {
+    columns: 4 12em;
+}
+ul {
+    list-style-type: none;
+}
