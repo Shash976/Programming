@@ -1,0 +1,21 @@
+{% extends 'battleship/layout.html'%}
+{% block body %}
+
+<h2>PLAY GAME</h2><br>
+
+<form id="select-user">
+<div id="select-users">
+    <span>{{user.username}}</span> VS <select name="players" id="select-players">
+        {%for player in players %}
+        <option value="{{player.username}}">{{player.username}}</option>
+        {%endfor%}
+    </select>
+    <input type="submit" value="Play!"> 
+</div>
+</form>
+
+<div id="mapformdiv" >
+    <h5 id="player-name"></h5>
+    <form id="mapform"></form>
+</div>
+{%endblock%}
