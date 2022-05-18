@@ -1,2 +1,2 @@
 # Programming
-My Programming Journal. Details all my experimental software
+My Programming Journal. Contains all of my code. Both experimental code and projects
