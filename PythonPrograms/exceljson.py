@@ -3,8 +3,6 @@ import csv
 import json
 import sys
 
-path = sys.argv[1]
-
 '''---------------------------------------------------------------------------x-------------------------------x--------------------------------------------------------------'''
 
 # Function to convert a CSV to JSON
@@ -43,4 +41,5 @@ def excel_to_json(path):
     return csv_to_json(csv_path, json_path)
 
 if __name__ == "__main__":
+    path = sys.argv[1]
     excel_to_json(path)
