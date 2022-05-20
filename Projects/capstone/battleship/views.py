@@ -27,6 +27,7 @@ def login_view(request):
     else:
         return render(request, "battleship/login.html")
 
+@login_required(login_url=reverse_lazy("login"))
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -51,6 +52,7 @@ def register(request):
     else:
         return render(request, "battleship/register.html")
 
+@login_required(login_url=reverse_lazy("login"))
 def index(request):
     if request.method == "POST":
         pass
@@ -69,5 +71,7 @@ def create_map(request):
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
 
+@login_required(login_url=reverse_lazy("login"))
+@csrf_exempt
 def play_game(request, player1, player2):
     pass
