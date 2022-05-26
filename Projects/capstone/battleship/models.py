@@ -7,8 +7,7 @@ import inflect
 
 # Create your models here.
 class User(AbstractUser):
-    hits = models.IntegerField(default=0)
-    turns = models.IntegerField(default=0)
+    pass
 
 class Map(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="maps")
