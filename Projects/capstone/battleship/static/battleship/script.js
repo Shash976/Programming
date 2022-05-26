@@ -37,11 +37,9 @@ function makecheckboxes(player, mapform, submit_val) {
             tr.innerHTML += `<td id=${col}><input type="checkbox" name="R${tr.id} C${col}" id="R${tr.id}C${col}" value=1></td>`;
         }
     });
-    document.querySelector('#player-name').innerText = `Make your map ${players[index]}`
-    document.querySelector('#mapform').onsubmit = () => createmap(index)
 }
-
-function createmap(index) {
+maps = []
+function createmap(index=0, push=true, players=users) {
     map = [];
     tds = document.querySelectorAll('td');
     const inps = [];
