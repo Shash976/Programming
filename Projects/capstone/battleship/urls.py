@@ -12,8 +12,13 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("logout", views.logout_view, name="logout"),
 
-    #APIs
-    path("maps/create", views.create_map, name="create_map")
+    # APIs
+    path("maps/create", views.create_map, name="create_map"),
+    path("maps/<int:map_id>", views.map_api, name="maps"),
+
+    # GAME
+    path("play", views.play, name="play"),
+    path("game/<str:players>", views.game, name="game")
 ]
 
 if settings.DEBUG:
