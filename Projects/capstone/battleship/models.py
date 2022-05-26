@@ -18,6 +18,10 @@ class Map(models.Model):
             "user": self.user.username,
             "map" : json.loads(self.map)
         }
+    
+    def __str__(self):
+        x = inflect.engine()
+        return f"{self.user}\'s {x.number_to_words(x.ordinal(list(self.user.maps.all()).index(self)+1)).capitalize()} Map"
 
 class Match(models.Model):
     player_1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="matches_player1")
