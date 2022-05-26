@@ -17,10 +17,16 @@ function loadcheckboxes(cnt=0, players=users, mapform = document.querySelector('
     document.querySelector('#mapform').onsubmit = () => createmap(index = cnt);
 }
 
-function makecheckboxes(index) {
-    mapform = document.querySelector('#mapform')
-    mapform.innerHTML = `<table><tbody></tbody></table><input type="hidden" value="${players[index]}"><input type="submit" value="Create Map">`;
-    var tbody = mapform.querySelector('tbody');
+function makecheckboxes(player, mapform, submit_val) {
+    mapform.innerHTML =
+    `<table id="maptable">
+        <tbody></tbody>
+    </table>
+    <input type="hidden" name="player" id="player" value="${player}">
+    <input type="submit" value="${submit_val}">`;
+    table = mapform.querySelector('#maptable');
+    table.innerHTML = '<tbody></tbody>';
+    var tbody = table.querySelector('tbody');
     const maximum = 4;
     for (var row = 0; row < maximum; row++) {
         tbody.innerHTML += `<tr id="${row}"></tr>`;
