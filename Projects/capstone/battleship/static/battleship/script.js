@@ -81,8 +81,9 @@ function pushMap(map, player) {
     fetch('/maps/create', {
         method: 'POST',
         body: JSON.stringify({
-            "user": player,
-            "map": map
+            "player": player,
+            "map": map,
+            "index": users.indexOf(player)
         })
     })
     .then(response => response.json())
