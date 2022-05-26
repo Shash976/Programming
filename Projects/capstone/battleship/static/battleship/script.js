@@ -69,9 +69,12 @@ function createmap(index=0, push=true, players=users) {
     if (push==true) {
         pushMap(map, players[index]);
         if (index == 0) {
-        makecheckboxes(1)
-        document.querySelector('#mapform').onsubmit = () => createmap(1)
-    }
+            loadcheckboxes(cnt=1)
+            document.querySelector('#mapform').onsubmit = () => createmap(index=1)
+        } else if (index == 1) {
+            location.href = `play?p1=${players[0]}&p1m=${maps[0]}&p2=${players[1]}&p2m=${maps[1]}`
+        }
+    }    
     return false;
 }
 function pushMap(map, player) {
