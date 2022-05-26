@@ -44,8 +44,11 @@ def main():
         player = Player(name=input(f"Player {id+1}: "), id=id, map = '', turns=0, hits=0) #Create Player
         create_map(player)
     players = Player.players
-    play_battleship(players[0], players[1])
-    play_battleship(players[1], players[0])
+    for i in players:
+        player = players[0]
+        players.remove(player)
+        play_battleship(player, players[0])
+        players.append(player)
     max_chances = max(players[0].turns, players[1].turns)
     least_chances = min(players[0].turns, players[1].turns)
     winner = players[0].get_player_by_turns(least_chances)
