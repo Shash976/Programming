@@ -4,6 +4,8 @@ from django.conf.urls.static import static
 from . import views
 from .models import *
 
+app_name = "battleship"
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("login", views.login_view, name="login"),
