@@ -65,9 +65,10 @@ function createmap(index=0, push=true, players=users) {
         coordinates.push(coordinate);
         map[coordinate["row"]][coordinate["column"]] = 1;
     });
-    
-    pushMap(map, players[index]);
-    if (index == 0) {
+    maps.push(JSON.stringify(map))    
+    if (push==true) {
+        pushMap(map, players[index]);
+        if (index == 0) {
         makecheckboxes(1)
         document.querySelector('#mapform').onsubmit = () => createmap(1)
     }
