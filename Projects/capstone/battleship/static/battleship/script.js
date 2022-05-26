@@ -1,14 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('#select-user').onsubmit = () => loadcheckboxes()
-});
-
-var players = [document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value]
-
-function loadcheckboxes() {
-    var cnt = 0;
-    makecheckboxes(cnt)
-    return false;
-}
+    document.querySelector('#select-user').onsubmit = () => {
+        loadcheckboxes();
+        return false;
+    }
 });
 users = [document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value];
 function loadcheckboxes(cnt=0, players=users, mapform = document.querySelector('#mapform'), submit_val="Create Map") {
@@ -91,4 +85,6 @@ function pushMap(map, player) {
         console.log(result);
     });
 }
-
+function play_game(map, player) {
+    
+}
