@@ -4,4 +4,5 @@ from .models import *
 # Register your models here.
 admin.site.register(User)
 admin.site.register(Match)
+admin.site.register(PlayerInGame)
 admin.site.register(Map)
