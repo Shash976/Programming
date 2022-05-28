@@ -60,8 +60,9 @@ def index(request):
         pass
     return render(request, "battleship/index.html", {"players":User.objects.exclude(username=request.user.username).all()})
 
-def map_api(request, map_id):
-    map = Map.objects.get(id=map_id)
+def map_api(request,username,map_id):
+    user = User.objects.get(username=username)
+    map = list(user.maps.all())[int(map_id)]
     return JsonResponse(map.serialize())
 
 @login_required(login_url=reverse_lazy("battleship:login"))
@@ -81,14 +82,14 @@ def create_map(request):
 @login_required(login_url=reverse_lazy("login"))
 @csrf_exempt
 def play(request):
-    p1 = request.GET.get('p1').strip()
-    p1m = request.GET.get('p1m').strip()
-    p2 = request.GET.get('p2').strip()
-    p2m = request.GET.get('p2m').strip()
-    u1m = max([m.id for m in Map.objects.filter(map=(', ').join(p1m.split(',')))])
-    u2m = max([m.id for m in Map.objects.filter(map=(', ').join(p2m.split(',')))])
-    players = {"p1":p1,"p1m":u1m, "p2":p2, "p2m":u2m}
-    return HttpResponseRedirect(reverse("battleship:game", kwargs={"players":json.dumps(players)}))
+    p1 = User.objects.get(username=request.GET.get('p1').strip())
+    p2 = User.objects.get(username=request.GET.get('p2').strip())
+    p1m = json.dumps(json.loads(request.GET.get('p1m').strip()))
+    p2m = json.dumps(json.loads(request.GET.get('p2m').strip()))
+    u1m = max([list(p1.maps.all()).index(m) for m in p1.maps.filter(map=p1m)])
+    u2m = max([list(p2.maps.all()).index(m) for m in p2.maps.filter(map=p2m)])
+    players = {"p1":p1.username,"p1m":u1m, "p2":p2.username, "p2m":u2m}
+    return HttpResponseRedirect(reverse("battleship:game", kwargs={"players":("").join(json.dumps(players).split())}))
 
 def game(request, players):
     players = json.loads(players)
