@@ -67,26 +67,26 @@ function createmap(index=0, push=true, players=[document.querySelector('#select-
         var coordinate = { "row": row, "column": column };
         coordinates.push(coordinate);
         map[coordinate["row"]][coordinate["column"]] = 1;
-    });
-    maps.push(JSON.stringify(map))    
+    });    
     if (push==true) {
-        pushMap(map, players[index]);
+        maps.push(JSON.stringify(map))
+        pushMap(map, players, index);
         if (index == 0) {
             loadcheckboxes(cnt=1)
-            document.querySelector('#mapform').onsubmit = () => createmap(index=1)
         } else if (index == 1) {
             location.href = `play?p1=${players[0]}&p1m=${maps[0]}&p2=${players[1]}&p2m=${maps[1]}`
         }
     }    
     return false;
 }
-function pushMap(map, player) {
+
+function pushMap(map, players, index) {
     fetch('/maps/create', {
         method: 'POST',
         body: JSON.stringify({
-            "player": player,
+            "player": players[index],
             "map": map,
-            "index": users.indexOf(player)
+            "index": index
         })
     })
     .then(response => response.json())
@@ -94,6 +94,5 @@ function pushMap(map, player) {
         console.log(result);
     });
 }
-function play_game(map, player) {
-    
+
 }
