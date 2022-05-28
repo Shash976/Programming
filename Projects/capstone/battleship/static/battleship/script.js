@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     if (document.querySelector('#select-user')){
-    document.querySelector('#select-user').onsubmit = () => {
-        loadcheckboxes();
-        return false;
+        document.querySelector('#select-user').onsubmit = () => {
+            loadcheckboxes();
+            return false;
+        }
     }
 });
 users = [document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value];
