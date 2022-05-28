@@ -14,7 +14,7 @@ urlpatterns = [
 
     # APIs
     path("maps/create", views.create_map, name="create_map"),
-    path("maps/<int:map_id>", views.map_api, name="maps"),
+    path("maps/<str:username>/<int:map_id>", views.map_api, name="maps"),
 
     # GAME
     path("play", views.play, name="play"),
