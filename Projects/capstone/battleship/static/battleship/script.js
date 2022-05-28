@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    if (document.querySelector('#select-user')){
     document.querySelector('#select-user').onsubmit = () => {
         loadcheckboxes();
         return false;
