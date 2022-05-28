@@ -76,7 +76,9 @@ function createmap(index=0, push=true, players=[document.querySelector('#select-
         } else if (index == 1) {
             location.href = `play?p1=${players[0]}&p1m=${maps[0]}&p2=${players[1]}&p2m=${maps[1]}`
         }
-    }    
+    } else {
+        return map
+    }
     return false;
 }
 
@@ -95,4 +97,41 @@ function pushMap(map, players, index) {
     });
 }
 
+function get_player_data() {
+    l = location.href.slice(location.href.lastIndexOf('/')+1, -1);
+    res = l.match(/%22:?\w+/g)
+    d = {}
+    for (var i = 0; i < res.length; i++) {
+        o = res[i]
+        res[i] = o.replace(/%22:?/, '')
+    }
+    for (let n =0; n<res.length; n=n+2){
+        d[res[n]] = res[n+1]
+    }
+}
+
+function play_game(map) {
+    tds = document.querySelectorAll('td')
+    inps = []
+    var coordinate = {};
+    var position;
+    tds.forEach(td=>{inps.push(td.querySelector('input'))})
+    ipns.forEach(inp=>{
+        if (inp.checked){
+            coordinate['column']=inp.parentElement.id;
+            coordinate['row']=inp.parentElement.parentElement.id;
+            position = inp;
+            }
+        })
+    row = coordinate['row']
+    column = coordinate['column']
+    if (map[row][column]) {
+        map[row][column] = 0;
+        label.innerText = 'HIT!!';
+        position.style.backgroundColor =  'green'; 
+    } else {
+        label.innerText = 'MISS';
+        position.style.backgroundColor = 'red';
+    }
+    position.disable=true;
 }
