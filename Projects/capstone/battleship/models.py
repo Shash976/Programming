@@ -50,7 +50,7 @@ class PlayerInGame(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
-    type = models.CharField(choices=PLAYER_TYPE_CHOICES, max_length=7, default="UNKNOWN")
+    type = models.CharField(choices=PLAYER_TYPE_CHOICES, max_length=7, default=UKNOWN)
     turns = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
 
