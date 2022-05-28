@@ -41,8 +41,8 @@ function makecheckboxes(player, mapform, submit_val) {
         }
     });
 }
-maps = []
-function createmap(index=0, push=true, players=users) {
+
+function createmap(index=0, push=true, players=[document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value]) {
     map = [];
     tds = document.querySelectorAll('td');
     const inps = [];
