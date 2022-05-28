@@ -6,8 +6,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
-users = [document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value];
-function loadcheckboxes(cnt=0, players=users, mapform = document.querySelector('#mapform'), submit_val="Create Map") {
+
+maps = [];
+player_data = {};
+
+function loadcheckboxes(cnt=0, 
+        players=[
+            document.querySelector('#select-users').querySelector('span').innerText, 
+            document.querySelector('#select-users').querySelector('#select-players').value], 
+        mapform = document.querySelector('#mapform'), submit_val="Create Map") {
     makecheckboxes(players[cnt], mapform, submit_val);
     document.querySelector('#player-name').innerText = `Make your map ${players[cnt]}`;
     document.querySelector('#mapform').onsubmit = () => createmap(index = cnt);
