@@ -87,9 +87,10 @@ function createmap(index=0, push=true, players=[document.querySelector('#select-
         map[coordinate["row"]][coordinate["column"]] = 1;
     });    
     if (push==true) {
-        result = pushMap(map, players, index, 'create') 
+        if (index == 0) result = pushMap(map=map, players=players, index=index)
+        else if (index == 1) result = pushMap(map=map, players=players, index=index, match_id=match_id) 
         result.then(res=>{
-            const match_id = res
+            match_id = res
             if (index == 0) {
             loadcheckboxes(cnt=1)
             } else if (index == 1) {
