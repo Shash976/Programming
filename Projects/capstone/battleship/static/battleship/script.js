@@ -84,9 +84,11 @@ function createmap(index=0, push=true, players=[document.querySelector('#select-
     return false;
 }
 
-async function pushMap(map, players, index, branch) {
-    const response = await fetch(`/matches/${branch}`, {
-        method: 'POST',
+async function pushMap(map, players, index, match_id=false) {
+    var response;
+    if (match_id){
+        response = await fetch(`/matches/create/${match_id}`, {
+            method: 'POST',
         body: JSON.stringify({
             "player": players[index],
             "map": map,
