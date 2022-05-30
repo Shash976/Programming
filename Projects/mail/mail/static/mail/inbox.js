@@ -153,12 +153,27 @@ function load_email(id, mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email-view').style.display = 'block';
 
-  fetch(`/emails/${email_id}`)
+  fetch(`/emails/${id}`)
   .then(response => response.json())
   .then(email => {
-    document.querySelector('#email-view').innerHTML = `<h3>${email.subject}</h3><br/><div id="email"></div>`;
-    document.querySelector('#email').innerHTML = `<h5>From: ${email.sender} <br/> To: ${email.recipients} <br/></h5><br><p>${email.body}</p>`
-  })
+    document.querySelector('#email-view').innerHTML = 
+    `<strong>From</strong>: ${email.sender} <br>
+     <strong>To</strong>: ${email.recipients} <br>
+     <strong>Subject</strong>: ${email.subject} <br>
+     <strong>Timestamp</strong>: ${email.timestamp} <br>
+     <br>
+     <button id="reply-button">Reply</button>
+     <br>
+     <hr>
+     <br>
+     ${email.body}`
+    ;
+    if (mailbox=="sent") return;
+    document.querySelector('#reply-button').onclick = () => {
+      reply(email.sender, email.subject, email.body, email.timestamp)
+    }
+    read(id)
+  }) 
   fetch(`/emails/${email_id}`, {
     method: 'PUT',
     body: JSON.stringify({
