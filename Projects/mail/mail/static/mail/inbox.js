@@ -116,7 +116,6 @@ function archive_email(element, email_id, mailbox){
   element.addEventListener('mouseover', () => {
     element.querySelector('.archive').style.display = 'block';
     element.querySelector('.details').style.float = 'left';
-    element.style.background = '#bdbbbb';
     if (mailbox == 'archive') {
       element.querySelector('.archive').innerHTML = 'Unarchive';
     }
@@ -145,7 +144,6 @@ function archive_email(element, email_id, mailbox){
   element.addEventListener('mouseout', () => {
     element.querySelector('.archive').style.display = 'none';
     element.querySelector('.details').style.float = 'none';
-    element.style.background = 'gray';
   });
 }
 
