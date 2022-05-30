@@ -174,10 +174,13 @@ function load_email(id, mailbox) {
     }
     read(id)
   }) 
-  fetch(`/emails/${email_id}`, {
-    method: 'PUT',
+}
+
+function read(id){
+  fetch(`/emails/${id}`, {
+    method: "PUT",
     body: JSON.stringify({
-        read: true
+      read:true
     })
-  }) 
+  })
 }
