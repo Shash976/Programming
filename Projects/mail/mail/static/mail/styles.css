@@ -26,7 +26,7 @@ textarea {
     min-height: 400px;
 }
 
-ul {
+#emails {
     list-style-type: none;
     padding-inline-start: 10px;
 }
@@ -39,4 +39,8 @@ ul {
   animation-duration: 2s;
   animation-fill-mode: forwards;
   animation-play-state: paused;
+}
+
+.read {
+    background-color: darkgray;
 }
