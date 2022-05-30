@@ -96,19 +96,6 @@ async function pushMap(map, players, index, branch) {
     return result_1["match_id"];
 }
 
-function get_player_data() {
-    l = location.href.slice(location.href.lastIndexOf('/')+1, -1);
-    res = l.match(/%22:?\w+/g)
-    d = {}
-    for (var i = 0; i < res.length; i++) {
-        o = res[i]
-        res[i] = o.replace(/%22:?/, '')
-    }
-    for (let n =0; n<res.length; n=n+2){
-        d[res[n]] = res[n+1]
-    }
-}
-
 function play_game(map) {
     tds = document.querySelectorAll('td')
     inps = []
