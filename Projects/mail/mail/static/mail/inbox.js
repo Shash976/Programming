@@ -184,3 +184,13 @@ function read(id){
     })
   })
 }
+
+function reply(sender, subject, body, timestamp) {
+  compose_email();
+  if (!subject.match(/^Re:/)){
+    subject = `Re: ${subject}`;
+  }
+  document.querySelector('#compose-subject').value = subject
+  document.querySelector('#compose-recipients').value = sender
+  document.querySelector('#compose-body').value=`On ${timestamp} ${sender} wrote: \n\t${body}\n`
+}
