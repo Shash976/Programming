@@ -69,32 +69,31 @@ function createmap(index=0, push=true, players=[document.querySelector('#select-
         map[coordinate["row"]][coordinate["column"]] = 1;
     });    
     if (push==true) {
-        maps.push(JSON.stringify(map))
-        pushMap(map, players, index);
-        if (index == 0) {
+        result = pushMap(map, players, index, 'create') 
+        result.then(res=>{
+            const match_id = res
+            if (index == 0) {
             loadcheckboxes(cnt=1)
-        } else if (index == 1) {
-            location.href = `play?p1=${players[0]}&p1m=${maps[0]}&p2=${players[1]}&p2m=${maps[1]}`
-        }
+            } else if (index == 1) {
+                location.href = `play?p1=${players[0]}&p2=${players[1]}&match=${match_id}`
+            }
+        })
     } else {
         return map
     }
     return false;
 }
 
-function pushMap(map, players, index) {
-    fetch('/maps/create', {
+async function pushMap(map, players, index, branch) {
+    const response = await fetch(`/matches/${branch}`, {
         method: 'POST',
         body: JSON.stringify({
             "player": players[index],
             "map": map,
-            "index": index
         })
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log(result);
     });
+    const result_1 = await response.json();
+    return result_1["match_id"];
 }
 
 function get_player_data() {
