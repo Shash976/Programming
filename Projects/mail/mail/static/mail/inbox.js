@@ -78,24 +78,36 @@ function load_mailbox(mailbox) {
   .then(emails => { 
       // Print emails
       emails.forEach(email=> {
-        const newM = document.createElement('div');
-        newM.className = 'email'
-        newM.innerHTML = `<li><div class='mail'><p class="details">${email.sender}:  ${email.subject}  (${email.timestamp})</p></div><button class="archive">Archive</button></li>`;
-        archive = newM.querySelector('.archive');
-        archive.style.display = 'none';
-        newM.querySelector('.details').style.float = 'none';
-        // Check for read email
-        if (email.read==true) {
-          newM.style.background = 'gray';
+        if (mailbox != "sent"){
+          sender_recipients = email.sender;
         } else {
-          newM.style.border = '1px solid black'
-          newM.style.background = 'white';
-        };
+          sender_recipients = email.recipients;
+        }
+        const newEmail = document.createElement('div');
+        newEmail.className = 'email'
+        newEmail.innerHTML = `<li><div class='mail'><p class="details">${email.sender}:  ${email.subject}  (${email.timestamp})</p></div><button class="archive">Archive</button></li>`;
+        archive = newEmail.querySelector('.archive');
+        archive.style.display = 'none';
+        newEmail.querySelector('.details').style.float = 'none';
+        // Check for read email
+        if (mailbox == "inbox"){
+          if (email.read) {
+            newEmail.style.background = 'gray';
+          } else {
+            newEmail.style.border = '1px solid black';
+            newEmail.style.background = 'white';
+          }}
+        else {
+          newEmail.style.border = '1px solid black';
+          newEmail.style.background = 'white';
+        }
         // Check Mailbox
         // Archiving Emails
-        archive_email(newM, email.id, mailbox)
-        newM.querySelector('.mail').addEventListener('click', () => load_email(email.id));
-        document.querySelector('#emails').append(newM);
+        if (mailbox != 'sent') {
+          archive_email(newEmail, email.id, mailbox)
+        }
+        newEmail.querySelector('.mail').addEventListener('click', () => load_email(email.id, mailbox));
+        document.querySelector('#emails').append(newEmail);
       });
     });
 };
