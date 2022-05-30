@@ -59,7 +59,7 @@ function makecheckboxes(player, mapform, submit_val) {
         }
     });
 }
-
+var match_id;
 function createmap(index=0, push=true, players=[document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value]) {
     map = [];
     tds = document.querySelectorAll('td');
@@ -117,11 +117,12 @@ async function pushMap(map, players, index, match_id=false) {
         response = await fetch(`/matches/create`, {
             method: 'POST',
             headers: {'X-CSRFToken': csrftoken},
-        body: JSON.stringify({
-            "player": players[index],
-            "map": map,
-        })
-    });
+            body: JSON.stringify({
+                "player": players[index],
+                "map": map,
+            })
+        });
+    }
     const result_1 = await response.json();
     return result_1["match_id"];
 }
