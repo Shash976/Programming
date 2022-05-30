@@ -10,6 +10,24 @@ document.addEventListener('DOMContentLoaded', function () {
 maps = [];
 player_data = {};
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
 function loadcheckboxes(cnt=0, 
         players=[
             document.querySelector('#select-users').querySelector('span').innerText, 
@@ -89,6 +107,16 @@ async function pushMap(map, players, index, match_id=false) {
     if (match_id){
         response = await fetch(`/matches/create/${match_id}`, {
             method: 'POST',
+            headers: {'X-CSRFToken': csrftoken},
+            body: JSON.stringify({
+                "player": players[index],
+                "map": map,
+            })
+        });
+    } else {
+        response = await fetch(`/matches/create`, {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken},
         body: JSON.stringify({
             "player": players[index],
             "map": map,

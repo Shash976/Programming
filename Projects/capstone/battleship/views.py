@@ -66,8 +66,7 @@ def map_api(request,username,map_id):
     return JsonResponse(map.serialize())
 
 @login_required(login_url=reverse_lazy("battleship:login"))
-@csrf_exempt
-def create_map(request):
+def create_match(request, match_id=None):
     if request.method == "POST":
         data = json.loads(request.body)
         username = data.get("player")
