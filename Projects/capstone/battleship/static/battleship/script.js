@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     if (document.querySelector('#select-user')){
-        document.querySelector('#select-user').onsubmit = () => {
+        document.querySelector('#select-user').onsubmit = (event) => {
+            event.preventDefault();
             loadcheckboxes();
-            return false;
         }
     }
 });
@@ -110,12 +110,6 @@ async function pushMap(map, players, index, match_id=false) {
     }
     const result_1 = await response.json();
     return result_1["match_id"];
-}
-
-function get_params() {
-    const params = new URLSearchParams(window.location.search);
-    var game = params.get('match')
-    return {"match_id":game}
 }
 
 function getCords() {
