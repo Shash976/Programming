@@ -47,8 +47,10 @@ function makecheckboxes(player, mapform, submit_val) {
     var tbody = table.querySelector('tbody');
     const maximum = 4;
     for (var row = 0; row < maximum; row++) {
-        tbody.innerHTML += `<tr id="${row}"></tr>`;
-    }
+        var columns = '';
+        for (var col=0; col<maximum; col++){
+            columns += `<td id=${col}><input type="checkbox" name="R${row} C${col}" id="R${row}C${col}" value=1></td>`;
+        }
     trs = tbody.querySelectorAll('tr');
     trs.forEach(tr => {
         for (var col = 0; col < maximum; col++) {
