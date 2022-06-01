@@ -1,9 +1,12 @@
 {%extends 'battleship/layout.html'%}
 {%block body%}
 
-<h1>{{player1}} vs {{player2}}</h1>
-<h3><span id="attacker-name"></span> attacks <span id="defender-name"></span></h3>
-<p>{{players}}</p>
-<button id="testbutton">Test Button</button>
+<form id="players-names">
+    <h1><span><input disabled id="p1" value="{{match.players.all.first}}"></span> vs <span><input id="p2"disabled value="{{match.players.all.last}}"></span></h1>
+    <input type="submit" value="Play!"/>
+</form>
+<div id="attackdiv">
+    <form id="attackform"></form>
+</div>
 
 {%endblock%}
