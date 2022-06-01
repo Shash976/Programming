@@ -59,3 +59,17 @@ class PlayerInGame(models.Model):
     
     def __str__(self):
         return f"Player - {self.user} in game {self.match.id}"
+
+    def serialize(self):
+        users = list(self.match.players.all())
+        opponent_player = PlayerInGame.objects.get(user = users[~users.index(self.user)], match=self.match)
+        opponent_map = opponent_player.inGameMap
+        return {
+            "user": self.user.username,
+            "match":self.match.id,
+            "type": self.type,
+            "map": self.map,
+            "opponentMap" : json.loads(opponent_map),
+            "turns": self.turns,
+            "hits": self.hits
+        }
