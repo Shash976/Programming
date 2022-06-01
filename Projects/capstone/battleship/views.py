@@ -111,23 +111,6 @@ def getMatch(request, match_id):
 @login_required(login_url=reverse_lazy("login"))
 @csrf_exempt
 def play(request):
-    p1 = User.objects.get(username=request.GET.get('p1').strip())
-    p2 = User.objects.get(username=request.GET.get('p2').strip())
-    p1m = json.dumps(json.loads(request.GET.get('p1m').strip()))
-    p2m = json.dumps(json.loads(request.GET.get('p2m').strip()))
-    u1m = max([list(p1.maps.all()).index(m) for m in p1.maps.filter(map=p1m)])
-    u2m = max([list(p2.maps.all()).index(m) for m in p2.maps.filter(map=p2m)])
-    players = {"p1":p1.username,"p1m":u1m, "p2":p2.username, "p2m":u2m}
-    return HttpResponseRedirect(reverse("battleship:game", kwargs={"players":("").join(json.dumps(players).split())}))
-
-def game(request, players):
-    players = json.loads(players)
-    game = Match.objects.create()
-    game.save()
-    p1 = PlayerInGame.objects.create(user = User.objects.get(username=players["p1"]), match=game, type='UNKNOWN')
-    p2 = PlayerInGame.objects.create(user = User.objects.get(username=players["p2"]), match=game, type='UNKNOWN')
-    p1.save()
-    p2.save()
-    p1m = Map.objects.get(id=players["p1m"])
-    p2m = Map.objects.get(id=players["p2m"])
+    game = Match.objects.get(id=int(request.GET.get('match')))
     return render(request, "battleship/play.html", {"match": game})
+    
