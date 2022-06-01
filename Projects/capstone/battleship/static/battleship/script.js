@@ -128,6 +128,23 @@ async function pushMap(map, players, index, match_id=false) {
     return result_1["match_id"];
 }
 
+function getCords() {
+    const tds = document.querySelctor('table').querySelectorAll('td');
+    inps = [];
+    var coordinates = [];
+    tds.forEach(td => { inps.push(td.querySelector('input')); });
+    ipns.forEach(inp => {
+        if (inp.checked) {
+            var coordinate = {};
+            coordinate['column'] = inp.parentElement.id;
+            coordinate['row'] = inp.parentElement.parentElement.id;
+            coordinate['position'] = inp;
+            coordinates.push(coordinate);
+        }
+    });
+    return coordinates;
+}
+
 function play_game(map) {
     tds = document.querySelectorAll('td')
     inps = []
