@@ -60,10 +60,33 @@ def index(request):
         pass
     return render(request, "battleship/index.html", {"players":User.objects.exclude(username=request.user.username).all()})
 
-def map_api(request,username,map_id):
+def updateInGamePlayer(request,match_id,username):
     user = User.objects.get(username=username)
-    map = list(user.maps.all())[int(map_id)]
-    return JsonResponse(map.serialize())
+    game = Match.objects.get(id=match_id)
+    player = PlayerInGame.objects.get(user=user, match=game)
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get('turns'):
+            player.turns = int(data['turns'])
+        if data.get('hits'):
+            player.hits = int(data['hits'])
+        if data.get('opponentMap'):
+            users = list(player.match.players.all())
+            opponent_player = PlayerInGame.objects.get(user = users[~users.index(player.user)], match=game)
+            opponent_player.inGameMap = json.dumps(data.get('opponentMap')).strip()
+        if data.get('type'):
+            if data.get('type').strip().upper() == "WINNER":
+                player.type = player.WINNER
+                game.winner=player.user
+            elif data.get('type').strip.upper() == "LOSER":
+                player.type = player.LOSER
+            else:
+                player.type = player.UKNOWN
+        game.save()
+        player.save()
+    elif request.method == "POST":
+        return JsonResponse({"message":"GET or PUT request please"})
+    return JsonResponse(player.serialize())
 
 @login_required(login_url=reverse_lazy("battleship:login"))
 def create_match(request, match_id=None):
