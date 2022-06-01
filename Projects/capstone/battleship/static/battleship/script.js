@@ -111,6 +111,7 @@ async function pushMap(map, players, index, match_id=false) {
     const result_1 = await response.json();
     return result_1["match_id"];
 }
+
 function get_params() {
     const params = new URLSearchParams(window.location.search);
     var game = params.get('match')
@@ -122,7 +123,7 @@ function getCords() {
     inps = [];
     var coordinates = [];
     tds.forEach(td => { inps.push(td.querySelector('input')); });
-    ipns.forEach(inp => {
+    inps.forEach(inp => {
         if (inp.checked) {
             var coordinate = {};
             coordinate['column'] = inp.parentElement.id;
@@ -149,24 +150,6 @@ function play_game(map) {
             position.disable=true;
         })
     }
-
-
-function getCords() {
-    const tds = document.querySelectorAll('td');
-    inps = [];
-    var coordinates = [];
-    tds.forEach(td => { inps.push(td.querySelector('input')); });
-    ipns.forEach(inp => {
-        if (inp.checked) {
-            var coordinate = {};
-            coordinate['column'] = inp.parentElement.id;
-            coordinate['row'] = inp.parentElement.parentElement.id;
-            coordinate['position'] = inp;
-            coordinates.push(coordinate);
-        }
-    });
-    return coordinates;
-}
 
 function updatePlayerData(data, turns=data["turns"], hits=data["hits"], map=data["opponentMap"], type=data["Unknown"]) {
     var new_data;
