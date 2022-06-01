@@ -44,6 +44,8 @@ class PlayerInGame(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     type = models.CharField(choices=PLAYER_TYPE_CHOICES, max_length=7, default=UKNOWN)
+    map = models.CharField(max_length=56, default=json.dumps([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]))
+    inGameMap = models.CharField(max_length=56, blank=True)
     turns = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
 
