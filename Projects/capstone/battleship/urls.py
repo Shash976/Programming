@@ -8,6 +8,8 @@ app_name = "battleship"
 
 urlpatterns = [
     path("", views.index, name="index"),
+
+    # Authentication
     path("login", views.login_view, name="login"),
     path("register", views.register, name="register"),
     path("logout", views.logout_view, name="logout"),
@@ -15,7 +17,8 @@ urlpatterns = [
     # APIs
     path("matches/create/<int:match_id>", views.create_match, name="create_match"),
     path("matches/create", views.create_match, name="create_match"),
-    path("maps/<str:username>/<int:map_id>", views.map_api, name="maps"),
+    path("matches/<int:match_id>/<str:username>", views.updateInGamePlayer, name="maps"),
+    path("matches/<int:match_id>", views.getMatch, name="getMatch"),
 
     # GAME
     path("play", views.play, name="play"),
