@@ -7,9 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-maps = [];
-player_data = {};
-
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -32,10 +29,10 @@ function loadcheckboxes(cnt=0,
         players=[
             document.querySelector('#select-users').querySelector('span').innerText, 
             document.querySelector('#select-users').querySelector('#select-players').value], 
-        mapform = document.querySelector('#mapform'), submit_val="Create Map") {
+        mapform = document.querySelector('#mapform'), submit_val="Create Map", push=true) {
     makecheckboxes(players[cnt], mapform, submit_val);
     document.querySelector('#player-name').innerText = `Make your map ${players[cnt]}`;
-    document.querySelector('#mapform').onsubmit = () => createmap(index = cnt);
+    document.querySelector('#mapform').onsubmit = () => createmap(index = cnt, push);
 }
 
 function makecheckboxes(player, mapform, submit_val) {
@@ -61,31 +58,18 @@ function makecheckboxes(player, mapform, submit_val) {
 }
 var match_id;
 function createmap(index=0, push=true, players=[document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value]) {
-    map = [];
-    tds = document.querySelectorAll('td');
-    const inps = [];
-    var coordinates = [];
-    const maximum = 4;
-    for (var r = 0; r < maximum; r++) {
-        row = [];
-        for (var c = 0; c < maximum; c++) {
-            row.push(0);
-        }
-        map.push(row);
-    }
-    tds.forEach(td => {
-        var inp = td.querySelector('input');
-        if (inp.checked) {
-            inps.push(inp);
-        }
-    });
-    inps.forEach(ship => {
-        var column = ship.parentElement.id;
-        var row = ship.parentElement.parentElement.id;
-        var coordinate = { "row": row, "column": column };
-        coordinates.push(coordinate);
-        map[coordinate["row"]][coordinate["column"]] = 1;
-    });    
+    map = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+    ];
+    const coordinates = getCords();
+    coordinates.forEach(coordinate=>{
+        const row = coordinate['row'];
+        const column = coordinate['column'];
+        map[row][column] = 1;
+    })    
     if (push==true) {
         if (index == 0) result = pushMap(map=map, players=players, index=index)
         else if (index == 1) result = pushMap(map=map, players=players, index=index, match_id=match_id) 
@@ -94,7 +78,7 @@ function createmap(index=0, push=true, players=[document.querySelector('#select-
             if (index == 0) {
             loadcheckboxes(cnt=1)
             } else if (index == 1) {
-                location.href = `play?p1=${players[0]}&p2=${players[1]}&match=${match_id}`
+                location.href = `play?match=${match_id}`
             }
         })
     } else {
@@ -127,29 +111,71 @@ async function pushMap(map, players, index, match_id=false) {
     const result_1 = await response.json();
     return result_1["match_id"];
 }
+function get_params() {
+    const params = new URLSearchParams(window.location.search);
+    var game = params.get('match')
+    return {"match_id":game}
+}
 
-function play_game(map) {
-    tds = document.querySelectorAll('td')
-    inps = []
-    var coordinate = {};
-    var position;
-    tds.forEach(td=>{inps.push(td.querySelector('input'))})
-    ipns.forEach(inp=>{
-        if (inp.checked){
-            coordinate['column']=inp.parentElement.id;
-            coordinate['row']=inp.parentElement.parentElement.id;
-            position = inp;
+function main(){
+    spans = document.querySelectorAll('span');
+    const players = [spans.querySelector('#p1'), spans.querySelector('#p2')]
+}
+
+function game(match_id, player, type="Unknown") {
+    var map;
+    var { coordinate, position } = getCords();
+    const row = coordinate['row']
+    const column = coordinate['column']
+    fetch(`/matches/${match_id}/${player}`).then(response=>response.json()).then(data=>{
+        map = data["opponentMap"];
+        turns = data["turns"];
+        hits = data["hits"];
+        if (hits < 4){
+            if (map[row][column]) {
+                map[row][column] = 0;
+                updatePlayerData(data, turns=data["turns"]+1, hits=data["hits"]+1, map=map, type=type)
+                label.innerText = 'HIT!!';
+                position.style.backgroundColor =  'green'; 
+            } else {
+                label.innerText = 'MISS';
+                position.style.backgroundColor = 'red';
             }
+            position.disable=true;
+        }
+    })
+}
+
+function getCords() {
+    const tds = document.querySelectorAll('td');
+    inps = [];
+    var coordinates = [];
+    tds.forEach(td => { inps.push(td.querySelector('input')); });
+    ipns.forEach(inp => {
+        if (inp.checked) {
+            var coordinate = {};
+            coordinate['column'] = inp.parentElement.id;
+            coordinate['row'] = inp.parentElement.parentElement.id;
+            coordinate['position'] = inp;
+            coordinates.push(coordinate);
+        }
+    });
+    return coordinates;
+}
+
+function updatePlayerData(data, turns=data["turns"], hits=data["hits"], map=data["opponentMap"], type=data["Unknown"]) {
+    var new_data;
+    fetch(`/matches/${data["match"]}/${data["user"]}`, {
+        method: "PUT",
+        headers: { 'X-CSRFToken': csrftoken },
+        body: JSON.stringify({
+            "turns": turns,
+            "opponentMap": map,
+            "hits":hits,
+            "type":type
         })
-    row = coordinate['row']
-    column = coordinate['column']
-    if (map[row][column]) {
-        map[row][column] = 0;
-        label.innerText = 'HIT!!';
-        position.style.backgroundColor =  'green'; 
-    } else {
-        label.innerText = 'MISS';
-        position.style.backgroundColor = 'red';
-    }
-    position.disable=true;
+    })
+    .then(response => response.json())
+    .then(x => {new_data=x})
+    return new_data;
 }
