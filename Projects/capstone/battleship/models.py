@@ -15,7 +15,7 @@ class Match(models.Model):
         User,
         through='PlayerInGame',
         through_fields=('match', 'user'),
-        related_name="matches"
+        related_name="matches",
     )
     winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="matches_won", blank=True, null=True)
 
