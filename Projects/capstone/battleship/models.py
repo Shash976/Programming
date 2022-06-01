@@ -9,19 +9,6 @@ import inflect
 class User(AbstractUser):
     pass
 
-class Map(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="maps")
-    map = models.CharField(max_length=41, default="[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]")
-
-    def serialize(self):
-        return {
-            "user": self.user.username,
-            "map" : json.loads(self.map)
-        }
-    
-    def __str__(self):
-        x = inflect.engine()
-        return f"{self.user}\'s {x.number_to_words(x.ordinal(list(self.user.maps.all()).index(self)+1)).capitalize()} Map"
 
 class Match(models.Model):
     players = models.ManyToManyField(
