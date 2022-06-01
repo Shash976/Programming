@@ -49,6 +49,11 @@ class PlayerInGame(models.Model):
     turns = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        if self.inGameMap == None:
+            self.inGameMap = self.map
+        super(PlayerInGame, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name_plural = "InGame Players"
     
