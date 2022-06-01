@@ -78,6 +78,9 @@ def create_match(request, match_id=None):
     else:
         return JsonResponse({"message": "Please send POST request"})
 
+def getMatch(request, match_id):
+    return JsonResponse(Match.objects.get(id=match_id).serialize())
+
 @login_required(login_url=reverse_lazy("login"))
 @csrf_exempt
 def play(request):

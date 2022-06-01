@@ -25,6 +25,12 @@ class Match(models.Model):
     def __str__(self):
         return f"Match {self.id}"
 
+    def serialize(self):
+        return {
+            "id" : self.id,
+            "players": [PlayerInGame.objects.get(user=user, match=self).serialize() for user in self.players.all()]
+        }
+
 class PlayerInGame(models.Model):
     WINNER = 'Winner'
     LOSER = 'Loser'
