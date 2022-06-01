@@ -94,10 +94,14 @@ def create_match(request, match_id=None):
         data = json.loads(request.body)
         username = data.get("player")
         map = data.get("map")
-        i = data.get("index")
-        m = Map.objects.create(user=User.objects.get(username=username), map=map)
-        m.save()
-        return JsonResponse({"message": f"Worked. Index is {i}"})
+        if match_id:
+            game = Match.objects.get(id=match_id)
+        else:
+            game = Match.objects.create()
+        game.save()
+        player = PlayerInGame.objects.create(user=User.objects.get(username=username), map=map, inGameMap=map, match=game)
+        player.save()
+        return JsonResponse({"match_id": game.id})
     else:
         return JsonResponse({"message": "Please send POST request"})
 
