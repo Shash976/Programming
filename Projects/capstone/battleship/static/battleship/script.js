@@ -94,7 +94,7 @@ function createmap(index=0, push=true, players=[document.querySelector('#select-
             if (index == 0) {
             loadcheckboxes(cnt=1)
             } else if (index == 1) {
-                location.href = `play?p1=${players[0]}&p2=${players[1]}&match=${match_id}`
+                location.href = `play?match=${match_id}`
             }
         })
     } else {
