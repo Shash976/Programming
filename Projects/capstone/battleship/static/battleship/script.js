@@ -34,6 +34,7 @@ function getCookie(name) {
 }
 
 const csrftoken = getCookie('csrftoken');
+var match_id;
 
 function loadcheckboxes(cnt=0, 
         players=[
