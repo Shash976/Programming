@@ -1,8 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
-    if (document.querySelector('#select-user')){
+    if (document.querySelector('#select-user')) {
         document.querySelector('#select-user').onsubmit = (event) => {
             event.preventDefault();
-            loadcheckboxes();
+            loadcheckboxes(cnt=0);
+        }
+    }
+    if(document.querySelector('#players-names')){
+        const playerF = document.querySelector('#players-names')
+        playerF.onsubmit = (event) => {
+            event.preventDefault();
+            var players = [playerF.querySelector('#p1').value, playerF.querySelector('#p2').value]
+            var mainform = document.querySelector('div#attackdiv').querySelector('form')
+            var res = loadcheckboxes(cnt=0, players=players, mapform=mainform, submit_val="SHOOT!", push=false, heading="Attack")
+            console.log(res)
         }
     }
 });
@@ -51,11 +61,8 @@ function makecheckboxes(player, mapform, submit_val) {
         for (var col=0; col<maximum; col++){
             columns += `<td id=${col}><input type="checkbox" name="R${row} C${col}" id="R${row}C${col}" value=1></td>`;
         }
-    trs = tbody.querySelectorAll('tr');
-    trs.forEach(tr => {
-        for (var col = 0; col < maximum; col++) {
-            tr.innerHTML += `<td id=${col}><input type="checkbox" name="R${tr.id} C${col}" id="R${tr.id}C${col}" value=1></td>`;
-        }
+        tbody.innerHTML += `<tr id="${row}">${columns}</tr>`;
+    }
     });
 }
 var match_id;
