@@ -158,7 +158,12 @@ function play_game(match_id, player) {
                 label.innerText = 'MISS';
                 position.parentElement.style.backgroundColor = 'red';
             }
-            position.disable=true;
+            turns += 1;
+            turns_label.innerText = `${turns} Turns`;
+            updatePlayerData(data=data, hits=hits, turns=turns, map=map)
+            position.checked = false;
+            position.disabled = true;
+            console.log(map)
         })
     }
 
