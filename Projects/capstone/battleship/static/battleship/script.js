@@ -134,17 +134,29 @@ function getCords() {
     return coordinates;
 }
 
-function play_game(map) {
-    tds = document.querySelectorAll('td')
-    inps = []
-    var coordinate = {};
-    var position;
-    tds.forEach(td=>{inps.push(td.querySelector('input'))})
-    ipns.forEach(inp=>{
-        if (inp.checked){
-            coordinate['column']=inp.parentElement.id;
-            coordinate['row']=inp.parentElement.parentElement.id;
-            position = inp;
+function play_game(match_id, player) {
+    const coordinate = getCords();
+    const row = coordinate[0]['row'];
+    const column = coordinate[0]['column'];
+    const label = document.querySelector('#label');
+    const hits_label = document.querySelector('#hits');
+    const turns_label = document.querySelector('#turns');
+    var position = coordinate[0]['position']
+    fetch(`/matches/${match_id}/${player}`)
+        .then(response => response.json())
+        .then(data => {
+            var map = data['opponentMap'];
+            var turns = data['turns'];
+            var hits = data['hits'];
+            if (map[row][column] == 1) {
+                map[row][column] = 0;
+                label.innerText = 'HIT!!';
+                position.parentElement.style.backgroundColor = 'green';
+                hits += 1;
+                hits_label.innerText = `${hits} Hits`;
+            } else {
+                label.innerText = 'MISS';
+                position.parentElement.style.backgroundColor = 'red';
             }
             position.disable=true;
         })
