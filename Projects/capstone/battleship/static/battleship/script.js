@@ -165,21 +165,21 @@ function play_game(match_id, player) {
             position.disabled = true;
             console.log(map)
         })
-    }
+}
 
-function updatePlayerData(data, turns=data["turns"], hits=data["hits"], map=data["opponentMap"], type=data["Unknown"]) {
-    var new_data;
-    fetch(`/matches/${data["match"]}/${data["user"]}`, {
-        method: "PUT",
-        headers: { 'X-CSRFToken': csrftoken },
+function updatePlayerData(data,hits=data['hits'], turns=data['turns'], map=data['opponentMap'], type=data['type']){
+    var newData;
+    fetch(`/matches/${data['match']}/${data['user']}`, {
+        method:'PUT',
+        headers: {'X-CSRFToken': csrftoken},
         body: JSON.stringify({
-            "turns": turns,
-            "opponentMap": map,
-            "hits":hits,
-            "type":type
+            "opponentMap":map,
+            "type":type,
+            "turns":turns,
+            "hits":hits
         })
     })
-    .then(response => response.json())
-    .then(x => {new_data=x})
-    return new_data;
+    .then(response=>response.json())
+    .then(x => {newData=x})
+    return newData;
 }
