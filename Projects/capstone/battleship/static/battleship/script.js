@@ -42,7 +42,7 @@ function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = 
     const player = players[cnt];
     var index = cnt;
     mapform.innerHTML =
-    `<table id="maptable">
+        `<table id="maptable">
         <tbody></tbody>
     </table>
     <input type="hidden" name="player" id="player" value="${player}">
@@ -53,16 +53,16 @@ function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = 
     const maximum = 4;
     for (var row = 0; row < maximum; row++) {
         var columns = '';
-        for (var col=0; col<maximum; col++){
+        for (var col = 0; col < maximum; col++) {
             columns += `<td id=${col}><input type="checkbox" name="R${row} C${col}" id="R${row}C${col}" value=1></td>`;
         }
         tbody.innerHTML += `<tr id="${row}">${columns}</tr>`;
     }
-    });
-}
-var match_id;
-function createmap(index=0, push=true, players=[document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value]) {
-    map = [
+    if (!heading) document.querySelector('#player-name').innerText = `Make your map ${players[cnt]}`;
+    else document.querySelector('#player-name').innerText = `${heading} ${players.slice(cnt-1)[0]}`
+    mapform.onsubmit = (event) => {
+        event.preventDefault();
+        map = [
         [0,0,0,0],
         [0,0,0,0],
         [0,0,0,0],
