@@ -36,17 +36,11 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 var match_id;
 
-function loadcheckboxes(cnt=0, 
-        players=[
-            document.querySelector('#select-users').querySelector('span').innerText, 
-            document.querySelector('#select-users').querySelector('#select-players').value], 
-        mapform = document.querySelector('#mapform'), submit_val="Create Map", push=true) {
-    makecheckboxes(players[cnt], mapform, submit_val);
-    document.querySelector('#player-name').innerText = `Make your map ${players[cnt]}`;
-    document.querySelector('#mapform').onsubmit = () => createmap(index = cnt, push);
-}
-
-function makecheckboxes(player, mapform, submit_val) {
+function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = "Create Map", push = true, heading=false) {
+    if (!players) players = [document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value];
+    if (!mapform) mapform = document.querySelector('#mapform')
+    const player = players[cnt];
+    var index = cnt;
     mapform.innerHTML =
     `<table id="maptable">
         <tbody></tbody>
