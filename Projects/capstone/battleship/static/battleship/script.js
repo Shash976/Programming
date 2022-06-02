@@ -63,37 +63,38 @@ function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = 
     mapform.onsubmit = (event) => {
         event.preventDefault();
         map = [
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0],
-        [0,0,0,0]
-    ];
-    const coordinates = getCords();
-    coordinates.forEach(coordinate=>{
-        const row = coordinate['row'];
-        const column = coordinate['column'];
-        map[row][column] = 1;
-    })    
-    if (push==true) {
-        if (index == 0) result = pushMap(map=map, players=players, index=index)
-        else if (index == 1) result = pushMap(map=map, players=players, index=index, match_id=match_id) 
-        result.then(res=>{
-            match_id = res
-            if (index == 0) {
-            loadcheckboxes(cnt=1)
-            } else if (index == 1) {
-                location.href = `play?match=${match_id}`
-            }
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+        ];
+        const coordinates = getCords();
+        coordinates.forEach(coordinate => {
+            const row = coordinate['row'];
+            const column = coordinate['column'];
+            map[row][column] = 1;
         })
-    } else {
-        return map
-    }
-    return false;
+        if (push == true) {
+            if (index == 0) result = pushMap(map = map, players = players, index = index)
+            else if (index == 1) result = pushMap(map = map, players = players, index = index, match_id = match_id)
+            result.then(res => {
+                match_id = res
+                if (index == 0) {
+                    loadcheckboxes(cnt = 1)
+                } else if (index == 1) {
+                    location.href = `play?match=${match_id}`
+                }
+            })
+        } else {
+            return map
+        }
+
+    };
 }
 
-async function pushMap(map, players, index, match_id=false) {
+async function pushMap(map, players, index, match_id = false) {
     var response;
-    if (match_id){
+    if (match_id) {
         response = await fetch(`/matches/create/${match_id}`, {
             method: 'POST',
             headers: {'X-CSRFToken': csrftoken},
@@ -105,7 +106,7 @@ async function pushMap(map, players, index, match_id=false) {
     } else {
         response = await fetch(`/matches/create`, {
             method: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
+            headers: { 'X-CSRFToken': csrftoken },
             body: JSON.stringify({
                 "player": players[index],
                 "map": map,
@@ -117,10 +118,10 @@ async function pushMap(map, players, index, match_id=false) {
 }
 
 function getCords() {
-    const tds = document.querySelctor('table').querySelectorAll('td');
+    const tds = document.querySelector('table').querySelectorAll('td');
     inps = [];
-    var coordinates = [];
     tds.forEach(td => { inps.push(td.querySelector('input')); });
+    var coordinates = [];
     inps.forEach(inp => {
         if (inp.checked) {
             var coordinate = {};
