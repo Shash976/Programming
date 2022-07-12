@@ -22,6 +22,7 @@ urlpatterns = [
 
     # GAME
     path("play", views.play, name="play"),
+    path("gameover", views.gameover, name="gameover")
 ]
 
 if settings.DEBUG:

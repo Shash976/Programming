@@ -50,7 +50,7 @@ def register(request):
         except IntegrityError:
             return render(request, "battleship/register.html", {"message": "Username already taken."})  
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("battleship:index"))
     else:
         return render(request, "battleship/register.html")
 
@@ -73,12 +73,13 @@ def updateInGamePlayer(request,match_id,username):
         if data.get('opponentMap'):
             users = list(player.match.players.all())
             opponent_player = PlayerInGame.objects.get(user = users[~users.index(player.user)], match=game)
-            opponent_player.inGameMap = json.dumps(data.get('opponentMap')).strip()
+            opponent_player.inGameMap = json.dumps(data.get("opponentMap")).strip()
+            opponent_player.save()
         if data.get('type'):
             if data.get('type').strip().upper() == "WINNER":
                 player.type = player.WINNER
                 game.winner=player.user
-            elif data.get('type').strip.upper() == "LOSER":
+            elif data.get('type').strip().upper() == "LOSER":
                 player.type = player.LOSER
             else:
                 player.type = player.UKNOWN
@@ -114,3 +115,13 @@ def play(request):
     game = Match.objects.get(id=int(request.GET.get('match')))
     return render(request, "battleship/play.html", {"match": game})
     
+def gameover(request):
+    match_id = request.GET.get("match")
+    game = Match.objects.get(id=int(match_id))
+    players = [PlayerInGame.objects.get(user=user, match=game) for user in game.players.all()]
+    winner = PlayerInGame.objects.get(match=game,turns=max([player.turns for player in players]))
+    game.winner = winner.user
+    game.save()
+    winner.type = winner.WINNER
+    winner.save()
+    return render(request, 'battleship/gameover.html', {"match":game, "players":players, "winner":winner})

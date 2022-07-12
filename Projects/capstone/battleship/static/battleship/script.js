@@ -2,17 +2,16 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.querySelector('#select-user')) {
         document.querySelector('#select-user').onsubmit = (event) => {
             event.preventDefault();
-            loadcheckboxes(cnt=0);
+            loadcheckboxes(cnt = 0);
         }
     }
-    if(document.querySelector('#players-names')){
+    if (document.querySelector('#players-names')) {
         const playerF = document.querySelector('#players-names')
         playerF.onsubmit = (event) => {
             event.preventDefault();
             var players = [playerF.querySelector('#p1').value, playerF.querySelector('#p2').value]
             var mainform = document.querySelector('div#attackdiv').querySelector('form')
-            var res = loadcheckboxes(cnt=0, players=players, mapform=mainform, submit_val="SHOOT!", push=false, heading="Attack")
-            console.log(res)
+            loadcheckboxes(cnt = 0, players = players, mapform = mainform, submit_val = "SHOOT!", push = false, heading = "Attack")
         }
     }
 });
@@ -36,10 +35,10 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 var match_id;
 
-function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = "Create Map", push = true, heading=false) {
+function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = "Create Map", push = true, heading = false) {
     if (!players) players = [document.querySelector('#select-users').querySelector('span').innerText, document.querySelector('#select-users').querySelector('#select-players').value];
     if (!mapform) mapform = document.querySelector('#mapform')
-    const player = players[cnt];
+    var player = players[cnt];
     var index = cnt;
     mapform.innerHTML =
         `<table id="maptable">
@@ -59,7 +58,7 @@ function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = 
         tbody.innerHTML += `<tr id="${row}">${columns}</tr>`;
     }
     if (!heading) document.querySelector('#player-name').innerText = `Make your map ${players[cnt]}`;
-    else document.querySelector('#player-name').innerText = `${heading} ${players.slice(cnt-1)[0]}`
+    else document.querySelector('#player-name').innerText = `${heading} ${players.slice(cnt - 1)[0]}`
     mapform.onsubmit = (event) => {
         event.preventDefault();
         map = [
@@ -68,13 +67,14 @@ function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = 
             [0, 0, 0, 0],
             [0, 0, 0, 0]
         ];
-        const coordinates = getCords();
+        var coordinates = getCords();
         coordinates.forEach(coordinate => {
             const row = coordinate['row'];
             const column = coordinate['column'];
             map[row][column] = 1;
         })
-        if (push == true) {
+        if (push) {
+            console.log(true)
             if (index == 0) result = pushMap(map = map, players = players, index = index)
             else if (index == 1) result = pushMap(map = map, players = players, index = index, match_id = match_id)
             result.then(res => {
@@ -86,10 +86,74 @@ function loadcheckboxes(cnt = 0, players = false, mapform = false, submit_val = 
                 }
             })
         } else {
-            return map
+            console.log(false);
+            const label = document.querySelector('#label');
+            const hits_label = document.querySelector('#hits');
+            const turns_label = document.querySelector('#turns');
+            var row = coordinates[0]['row']
+            var column = coordinates[0]['column']
+            var position = coordinates[0]['position']
+            const match_id = parseInt(get_params('match'));
+            fetch(`/matches/${match_id}/${player}`)
+                .then(response => response.json())
+                .then(data => {
+                    var map = data['opponentMap'];
+                    var turns = data['turns'];
+                    var hits = data['hits'];
+                        if (map[row][column] == 1) {
+                            map[row][column] = 0;
+                            label.innerText = 'HIT!!';
+                            position.parentElement.style.backgroundColor = 'green';
+                            hits += 1;
+                            hits_label.innerText = `${hits} Hits`;
+                        } else {
+                            label.innerText = 'MISS';
+                            position.parentElement.style.backgroundColor = 'red';
+                        }
+                        turns += 1;
+                        turns_label.innerText = `${turns} Turns`;
+                        
+                        position.checked = false;
+                        position.disabled = true;
+                    updatePlayerData(data = data, hits = hits, turns = turns, map = map)
+                    if (hits==4 && cnt==0) loadcheckboxes(cnt=1, players=players,mapform=mapform, submit_val = "SHOOT!", push = false, heading = "Attack")
+                    else if (hits == 4 && cnt == 1) location.href = `/gameover?match=${match_id}`
+                })
         }
-
     };
+}
+
+function play_game(match_id, player) {
+    var coordinate = getCords();
+    var row = coordinate[0]['row'];
+    var column = coordinate[0]['column'];
+    const label = document.querySelector('#label');
+    const hits_label = document.querySelector('#hits');
+    const turns_label = document.querySelector('#turns');
+    var position = coordinate[0]['position']
+    fetch(`/matches/${match_id}/${player}`)
+        .then(response => response.json())
+        .then(data => {
+            var map = data['opponentMap'];
+            var turns = data['turns'];
+            var hits = data['hits'];
+            if (map[row][column] == 1) {
+                map[row][column] = 0;
+                label.innerText = 'HIT!!';
+                position.parentElement.style.backgroundColor = 'green';
+                hits += 1;
+                hits_label.innerText = `${hits} Hits`;
+            } else {
+                label.innerText = 'MISS';
+                position.parentElement.style.backgroundColor = 'red';
+            }
+            turns += 1;
+            turns_label.innerText = `${turns} Turns`;
+            updatePlayerData(data = data, hits = hits, turns = turns, map = map)
+            position.checked = false;
+            position.disabled = true;
+        })
+    return hits;
 }
 
 async function pushMap(map, players, index, match_id = false) {
@@ -97,7 +161,7 @@ async function pushMap(map, players, index, match_id = false) {
     if (match_id) {
         response = await fetch(`/matches/create/${match_id}`, {
             method: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
+            headers: { 'X-CSRFToken': csrftoken },
             body: JSON.stringify({
                 "player": players[index],
                 "map": map,
@@ -134,52 +198,26 @@ function getCords() {
     return coordinates;
 }
 
-function play_game(match_id, player) {
-    const coordinate = getCords();
-    const row = coordinate[0]['row'];
-    const column = coordinate[0]['column'];
-    const label = document.querySelector('#label');
-    const hits_label = document.querySelector('#hits');
-    const turns_label = document.querySelector('#turns');
-    var position = coordinate[0]['position']
-    fetch(`/matches/${match_id}/${player}`)
-        .then(response => response.json())
-        .then(data => {
-            var map = data['opponentMap'];
-            var turns = data['turns'];
-            var hits = data['hits'];
-            if (map[row][column] == 1) {
-                map[row][column] = 0;
-                label.innerText = 'HIT!!';
-                position.parentElement.style.backgroundColor = 'green';
-                hits += 1;
-                hits_label.innerText = `${hits} Hits`;
-            } else {
-                label.innerText = 'MISS';
-                position.parentElement.style.backgroundColor = 'red';
-            }
-            turns += 1;
-            turns_label.innerText = `${turns} Turns`;
-            updatePlayerData(data=data, hits=hits, turns=turns, map=map)
-            position.checked = false;
-            position.disabled = true;
-            console.log(map)
-        })
-}
 
-function updatePlayerData(data,hits=data['hits'], turns=data['turns'], map=data['opponentMap'], type=data['type']){
+
+function updatePlayerData(data, hits = data['hits'], turns = data['turns'], map = data['opponentMap'], type = data['type']) {
     var newData;
     fetch(`/matches/${data['match']}/${data['user']}`, {
-        method:'PUT',
-        headers: {'X-CSRFToken': csrftoken},
+        method: 'PUT',
+        headers: { 'X-CSRFToken': csrftoken },
         body: JSON.stringify({
-            "opponentMap":map,
-            "type":type,
-            "turns":turns,
-            "hits":hits
+            "opponentMap": map,
+            "type": type,
+            "turns": turns,
+            "hits": hits
         })
     })
-    .then(response=>response.json())
-    .then(x => {newData=x})
-    return newData;
+        .then(response => response.json())
+        .then(x => { newData = x })
+}
+
+function get_params(parameter) {
+    const params = new URLSearchParams(window.location.search);
+    var val = params.get(parameter)
+    return val;
 }
